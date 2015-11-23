@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="frmDevolucion" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e8fdd0e9-aaa2-4b73-9eef-8e9040f424e7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="372"/>
+	<parameter name="numForm" class="java.lang.String"/>
+	<parameter name="tipoGarantia" class="java.lang.String"/>
+	<parameter name="contrato" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="metodoAdquisicion" class="java.lang.String"/>
+	<parameter name="horaFecha" class="java.lang.String"/>
+	<parameter name="proveedor" class="java.lang.String"/>
+	<parameter name="afianzadora" class="java.lang.String"/>
+	<parameter name="numGarantia" class="java.lang.String"/>
+	<parameter name="fechaVencimiento" class="java.lang.String"/>
+	<parameter name="montoGarantia" class="java.math.BigDecimal"/>
+	<parameter name="gerente" class="java.lang.String"/>
+	<parameter name="descripcion" class="java.lang.String"/>
+	<parameter name="urlEscudoES" class="java.lang.String"/>
+	<title>
+		<band height="117" splitType="Stretch">
+			<image hAlign="Center" vAlign="Middle" onErrorType="Blank">
+				<reportElement uuid="f356e44b-4e2c-424c-856c-2316b1f0a30d" x="256" y="11" width="60" height="54"/>
+				<imageExpression><![CDATA[$P{urlEscudoES}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="53e20ee9-ddc8-471d-92d0-1159e0bcc44d" x="148" y="70" width="282" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["FORMULARIO N° " + $P{numForm}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="cd6b7d57-1784-4614-b9b7-16a9dfcff662" x="0" y="85" width="555" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["DEVOLUCION DE " + $P{tipoGarantia}.toUpperCase() + " " + $P{contrato}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="65068046-c51e-457e-827d-d55841aa240c" x="0" y="100" width="555" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{metodoAdquisicion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="343" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e85f649b-d64f-4f06-aeb9-c9688ddb6adb" x="36" y="5" width="536" height="14"/>
+				<textElement/>
+				<text><![CDATA[Ministerio de Educación, Gerencia de de Adquisiciones y Contrataciones Institucional, San Salvador]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement uuid="83f4d283-fcf0-4e90-bf8b-8ef0fcadf577" x="36" y="19" width="519" height="14"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$P{horaFecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2a08c097-a369-4eb3-9f86-3438aaef6e6c" x="38" y="41" width="138" height="15"/>
+				<textElement/>
+				<text><![CDATA[C O N S I D E R A N D O:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="06c8e6ff-f5e8-4067-94d3-3370ce541341" x="76" y="67" width="445" height="86"/>
+				<textElement/>
+				<text><![CDATA[Que de conformidad a lo establecido en el inciso cuarto del Art. 31 de la Ley de Adquisiciones y Contrataciones de la Administración Pública, cumplidas las obligaciones garantizadas y vencido el plazo, la UACI deberá en un plazo no mayor de veinte días hábiles, devolver los documentos que amparan las garantías de: buena inversión de anticipo, cumplimiento de contrato, buena obra, de buen servicio, funcionamiento y calidad de los bienes y todas aquellas especialmente solicitadas e la contratación. ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0070a35f-16aa-4183-b589-c79e60e257e8" x="55" y="65" width="14" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[I.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="33054fe4-34a6-4922-9b17-b6661a5d8ab2" x="54" y="163" width="14" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[II.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="016bb6c0-6874-4c44-907b-6f91fd38f169" x="76" y="166" width="445" height="64"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Que para garantizar las obligaciones contraídas en el contrato N° " + $P{contrato} + ", que se refirió a " + $P{descripcion} + " suscrito entre el Ministerio de Educación y " + $P{proveedor} +
+", la Contratista presentó garantía emitida por " + $P{afianzadora} + ", por la cantidad de $" + $P{montoGarantia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e3fa856e-8b26-4d6c-92a1-e46c3410f340" x="76" y="247" width="445" height="61"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Que habiéndose cumplido las obligaciones garantizadas y vencido el plazo de la referida garantía, la Gerencia de Adquisiciones y Contrataciones Institucional, del Ministerio de Educación, procede a devolver a " + $P{proveedor} + ", la garantía que a continuación se detalla:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="85985f01-4797-44ed-b98e-4944c4f9ed91" x="55" y="244" width="13" height="13"/>
+				<textElement/>
+				<text><![CDATA[III.]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="155" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="a7deb551-b1d7-4391-bf5d-573d70029448" x="10" y="6" width="531" height="93"/>
+			</rectangle>
+			<line>
+				<reportElement uuid="18548097-8e77-41d5-951f-1d34b0638599" x="94" y="6" width="1" height="93"/>
+			</line>
+			<line>
+				<reportElement uuid="1418e9ca-db5e-4e49-9334-00ed8ca5bfb6" x="170" y="6" width="1" height="93"/>
+			</line>
+			<line>
+				<reportElement uuid="64164dae-9763-4771-b6dc-d5880e80b7af" x="276" y="7" width="1" height="92"/>
+			</line>
+			<line>
+				<reportElement uuid="114f447f-a536-4989-b04e-7d3eb7ecaae5" x="363" y="7" width="1" height="92"/>
+			</line>
+			<staticText>
+				<reportElement uuid="197f880a-0486-4916-a3f9-f9cc954cb688" x="10" y="6" width="84" height="29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[N° GARANTIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f318885-a0e0-4437-ad75-983fe5e0e6e6" x="96" y="8" width="74" height="27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[VENCIMIENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c0070e9b-ddd3-469a-99f7-2c5ffe641e73" x="174" y="7" width="102" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[TIPO GARANTIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3983eea6-3fc1-4bde-9cdb-9de3df64216f" x="264" y="7" width="99" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2afea6b0-6a10-4a34-a12f-36dd83311d97" x="364" y="7" width="177" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Empresa y/o Persona Natural]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2e3dd5ba-519f-40ae-8e88-e9eb3172e98d" x="12" y="35" width="529" height="1"/>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="05f48faf-dd10-4cff-82d4-d632dd565ee5" x="10" y="36" width="84" height="63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{numGarantia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="019b32b1-59ba-4df2-b803-191a2820644b" x="96" y="36" width="69" height="63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{fechaVencimiento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="47448a43-6f79-4d38-ba3d-aa075a8787a9" x="172" y="36" width="104" height="63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{tipoGarantia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="$ #,##0.00;(#,##0.00)" isBlankWhenNull="true">
+				<reportElement uuid="32e97d0a-ca05-4b9e-afa1-697ed3c59237" x="277" y="36" width="86" height="63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{montoGarantia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="76ca3ced-85ad-46bb-9f6f-eb3b10ef9ecd" x="364" y="36" width="177" height="63"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{proveedor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<summary>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6c32cb49-0408-4747-978c-4f15c6ff3e54" x="28" y="28" width="278" height="20"/>
+				<textElement/>
+				<text><![CDATA[Gerente de Adquisiciones y Contrataciones Institucional]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2811d88c-e25f-4bd6-9449-381aed148cde" x="30" y="12" width="278" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{gerente}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

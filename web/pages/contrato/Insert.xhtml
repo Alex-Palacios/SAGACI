@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+   
+    
+    <!-- CREAR CONTRATO-->
+    
+    <p:dialog widgetVar="crearContrato" header="NUEVO CONTRATO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p7.insert}">
+
+        <h:form id="frmCrearContrato">
+            <p:panelGrid columns="4" >
+                <p:outputLabel value="N&deg; CONTRATO:" for="numContrato" />
+                <p:inputText id="numContrato" value="#{contratoController.newItem.numero}" maxlength="50" required="true" requiredMessage="NUMERO DE CONTRATO REQUERIDO"  />
+                
+                <p:outputLabel value="UNIDAD TECNICA:" for="unidad" />
+                <p:selectOneMenu id="unidad" value="#{contratoController.newItem.unidad}" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{unidadTecnicaController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="FECHA DOCUMENTO:" for="fechaContrato" />
+                <p:calendar id="fechaContrato" value="#{contratoController.newItem.fecha}"  mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" required="false" requiredMessage="FECHA DE CONTRATO REQUERIDO" locale="sv" />
+                
+                <p:outputLabel value="ADMINISTRADOR:" for="admin" />
+                <p:inputText id="admin" value="#{contratoController.newItem.admin}" maxlength="100"  />
+                
+                <p:outputLabel value="PROCESO:" for="proceso" />
+                <p:selectOneMenu id="proceso" value="#{contratoController.newItem.proceso}" required="true" requiredMessage="PROCESO REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems value="#{procesoController.itemsSelectMenu}" var="p" itemDescription="#{p.descripcion}"  />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="N&deg; ADJUDICACION:" for="nunAdj" />
+                <p:inputText id="nunAdj" value="#{contratoController.newItem.adjudicacion}" maxlength="50"  />
+                
+                <p:outputLabel value="CONTRATISTA:" for="contratista" />
+                <p:selectOneMenu id="contratista" value="#{contratoController.newItem.contratista}" required="true" requiredMessage="CONTRATISTA REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{proveedorController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="FUENTE FINANCIAMIENTO:" for="fuente" />
+                <p:selectOneMenu id="fuente" value="#{contratoController.newItem.fuente}" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{fuenteFinancController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="PLAZO:" for="plazo" />
+                <p:inputText id="plazo" value="#{contratoController.newItem.plazo}" maxlength="50" required="false" requiredMessage="PLAZO REQUERIDO" />
+                
+                <p:outputLabel value="FORMA PAGO:" for="formaPago" />
+                <p:inputText id="formaPago" value="#{contratoController.newItem.formaPago}" maxlength="50"  />
+                
+                <p:outputLabel value="FECHA INICIO:" for="fechaInicio" />
+                <p:calendar id="fechaInicio" value="#{contratoController.newItem.fechaInicio}"  mode="popup"  navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy"  locale="sv"/>
+                
+                <p:outputLabel value="COMPROMISO PRESUPUESTARIO:" for="compromiso" />
+                <p:inputText id="compromiso" value="#{contratoController.newItem.compromisoPresup}" maxlength="50"  />
+                
+                <p:outputLabel value="FECHA FIN:" for="fechaFin" />
+                <p:calendar id="fechaFin" value="#{contratoController.newItem.fechaFin}" mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" locale="sv"/>
+                
+                <p:outputLabel value="FECHA ORDEN:" for="fechaOrden" />
+                <p:calendar id="fechaOrden" value="#{contratoController.newItem.fechaOrden}" mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" locale="sv"/>
+                
+                <p:outputLabel value="MONTO:" for="monto" />
+                <p:inputText id="monto" value="#{contratoController.newItem.monto}" required="false" requiredMessage="MONTO DEL CONTRATO REQUERIDO"  />
+                
+                <p:outputLabel value="ESTADO:" for="estado" />
+                <p:selectOneMenu id="estado" value="#{contratoController.newItem.estatusContrato}" >
+                    <f:selectItems  value="#{estatusContratoController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{contratoController.newItem.nota}" cols="30" rows="2" />
+                
+                <p:outputLabel value="RESOLUCION MODIFICATIVA:" for="rm" />
+                <p:inputText id="rm" value="#{contratoController.newItem.modificativa}" maxlength="50"  />
+                
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="GUARDAR" actionListener="#{contratoController.create}"  type="submit" update=":frmCrearContrato,:msg,:frmContratos" icon="ui-icon-disk" />
+            <p:commandButton value="CANCELAR" onclick="PF('crearContrato').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+    
+    
+    <!-- INSERTAR PAGO -->
+    <p:dialog widgetVar="registrarPago" header="REGISTRAR PAGO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+        <h:form id="frmRegistrarPago">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="CONTRATO:" for="contrato" />
+                <p:outputLabel id="contrato" value="#{contratoController.selectedPago.contrato.numero}"/>
+                <p:outputLabel value="MONTO CONTRATO:" for="montoC" />
+                <p:outputLabel id="montoC" value="#{contratoController.selectedPago.contrato.monto}" style="color: red;"/>
+                <p:outputLabel value="TOTAL PAGADO:" for="saldo" />
+                <p:outputLabel id="saldo" value="#{contratoController.selectedPago.contrato.sumaPagos}" style="color: blue;"/>
+                <p:outputLabel value="FECHA PAGO" for="fechaP" />
+                <p:calendar id="fechaP" value="#{contratoController.selectedPago.fecha}" mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA DE PAGO REQUERIDO" />
+                <p:outputLabel value="DOCUMENTO" for="doc" />
+                <p:inputText id="doc" value="#{contratoController.selectedPago.documento}" maxlength="50" />
+                <p:outputLabel value="TIPO PAGO" for="tipo" />
+                <p:selectOneMenu id="tipo" value="#{contratoController.selectedPago.tipo}" required="true" requiredMessage="TIPO PAGO REQUERIDO" >
+                    <f:selectItems  value="#{tipoPagoController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="MONTO PAGO" for="monto" />
+                <p:inputText id="monto" value="#{contratoController.selectedPago.monto}" required="true" requiredMessage="MONTO REQUERIDO"  />
+                <p:outputLabel value="NOTA" for="nota" />
+                <p:inputText id="nota" value="#{contratoController.selectedPago.nota}" size="50" />
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="GUARDAR" actionListener="#{contratoController.registrarPago}"  type="submit" update=":frmRegistrarPago,:msg,:frmContratos" icon="ui-icon-disk" />
+            <p:commandButton value="CANCELAR" onclick="PF('registrarPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+
+</html>
+

@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="title">ARCHIVOS</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="ARCHIVOS" action="#{archivoController.prepareList}" />
+                <p:menuitem value="CONTRATOS POR ARCHIVAR" action="#{archivoController.prepareListArchivar}" />
+                <p:menuitem value="VER PAGOS" action="#{pagoController.prepareList}" /> 
+                <p:menuitem value="FUENTES DE FINANCIAMIENTO" action="#{fuenteFinancController.prepareList}" /> 
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+                
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+             <h:form id="frmArchivos">   
+                    <p:outputLabel value="A&Ntilde;O:" /><p:selectOneMenu value="#{archivoController.anioRegistro}" editable="true" style="margin-bottom: -5px;">
+                                                                <f:selectItems  value="#{funciones.ultimos5Anios}"  />
+                                                                <p:ajax listener="#{archivoController.recreateModel}" update="dtArchivos"/>
+                                                          </p:selectOneMenu>
+                    <p:outputLabel value="FUENTE DE FINANC:" /><p:selectOneMenu value="#{archivoController.fuente}" editable="false" style="margin-bottom: -5px;">
+                        <f:selectItems  value="#{fuenteFinancController.itemsAvailableSelectOne}"  />
+                                                                <p:ajax listener="#{archivoController.recreateModel}" update="dtArchivos"/>
+                                                          </p:selectOneMenu>
+                
+                    <br/>
+                    <p:contextMenu for="dtArchivos">
+                        <p:menuitem value="Archivo" oncomplete="PF('verArchivo').show()" update=":frmVerArchivo" icon="ico-ver" styleClass="menu-context" />  
+                        <p:submenu label="Editar" >
+                            <p:menuitem value="Contrato" actionListener="#{archivoController.prepareUpdateContrato}" oncomplete="PF('editarContrato').show()" update=":frmEditarContrato" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p7.update}" />  
+                            <p:menuitem value="Archivo" oncomplete="PF('editarArchivo').show()" update=":frmEditarArchivo" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p9.update}" />  
+                        </p:submenu>
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarArchivo').show()" update=":frmEliminarArchivo" icon="ui-icon-document" styleClass="menu-context" disabled="#{!seguridadController.p9.delete}" />  
+                    </p:contextMenu> 
+                    
+                    
+                    
+                    <p:scrollPanel style="width:100%;height:450px;" mode="native">
+                    
+                        <h:commandLink style="float: left"> 
+                            <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                            <p:dataExporter type="xls" target="dtArchivos" fileName="ARCHIVO_#{archivoController.anioRegistro}" postProcessor="#{funciones.postProcessXLS_ARCHIVOS}" />  
+                     </h:commandLink>
+                      <p:commandButton action="#{archivoController.generarRptArchivos}" update=":frmRptArchivos" type="submit" icon="ico-pdf" iconPos="center" style="width: 30px;height: auto;float: left" />
+            
+                        <p:dataTable id="dtArchivos" var="archivo" value="#{archivoController.items}" filteredValue="#{archivoController.filtroArchivos}"
+                                 selection="#{archivoController.selected}" rowKey="#{archivo.id}" selectionMode="single"
+                                 paginator="true" rows="25" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO HAY ARCHIVOS POR ARCHIVAR" style="float: left">
+
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column rowspan="2" headerText="FECHA DE INGRESO" />
+                                <p:column rowspan="2" headerText="TECNICO" />
+                                <p:column rowspan="2" headerText="N&deg; DE DOC. CONTRACTUAL" />
+                                <p:column rowspan="2" headerText="FECHA DOCUMENTO CONTRACTUAL" />
+                                <p:column colspan="3" headerText="PLAZO DE EJECUCION DEL CONTRATO" />
+                                <p:column rowspan="2" headerText="FECHA ORDEN" />
+                                <p:column rowspan="2" headerText="UNIDAD TECNICA" />
+                                <p:column rowspan="2" headerText="ADMIN. CONTRATO" />
+                                <p:column rowspan="2" headerText="PROVEEDOR" />
+                                <p:column rowspan="2" headerText="FUENTE FINANCIAMIENTO" />
+                                <p:column colspan="4" headerText="PROCESO DE LICITACION O CONCURSO" />
+                                <p:column rowspan="2" headerText="NUMERO COMPROMISO PRESUPUESTARIO" />
+                                <p:column rowspan="2" headerText="NUMERO RESOLUCION DE ADJUDICACION" />
+                                <p:column rowspan="2" headerText="FORMA DE PAGO" />
+                                <p:column rowspan="2" headerText="MONTO CONTRATADO" />
+                                <p:column rowspan="2" headerText="ESTATUS CONTRATADO" />
+                                <p:column colspan="7" headerText="DATOS DE ARCHIVO" />
+                                <p:column rowspan="2" headerText="OBSERVACIONES" />
+                            </p:row>
+                            <p:row>
+                                <p:column colspan="1" headerText="PLAZO" />
+                                <p:column colspan="1" headerText="INICIO" />
+                                <p:column colspan="1" headerText="FIN" />
+                                <p:column rowspan="1" headerText="METODO ADQUISICION" />
+                                <p:column rowspan="1" headerText="NUMERO PROCESO" />
+                                <p:column rowspan="1" headerText="DESCRIPCION" width="300" />
+                                <p:column rowspan="1" headerText="NUMERO SIAP" />
+                                <p:column colspan="1" headerText="CAJA" />
+                                <p:column colspan="1" headerText="AMPO" />
+                                <p:column colspan="1" headerText="RECIBIDO POR" />
+                                <p:column colspan="1" headerText="FOLIO" />
+                                <p:column colspan="1" headerText="FECHA DE ENTREGA" />
+                                <p:column colspan="1" headerText="NUMERO DE PAGINAS" />
+                                <p:column colspan="1" headerText="DIGITALIZACION" />
+                            </p:row>
+                        </p:columnGroup>
+                        
+                        <p:column headerText="FECHA INGRESO" >
+                            <f:facet name="header">FECHA INGRESO</f:facet>
+                            <h:outputText value="#{archivo.fechaIngresoLabel}" />
+                        </p:column>
+                        
+                            <p:column headerText="TECNICO" filterBy="#{archivo.contrato.proceso.tecnico.nombre}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">TECNICO</f:facet>
+                            <h:outputText value="#{archivo.contrato.proceso.tecnico.nombre}" />
+                        </p:column>
+                        
+                            
+                        <p:column headerText="N&deg; DE DOC. CONTRACTUAL" >
+                            <f:facet name="header">N&deg; DE DOC. CONTRACTUAL</f:facet>
+                            <h:outputText value="#{archivo.contrato.numero}" />
+                        </p:column>
+                            
+                        <p:column headerText="FECHA DOCUMENTO CONTRACTUAL" >
+                            <f:facet name="header">FECHA DOCUMENTO CONTRACTUAL</f:facet>
+                            <h:outputText value="#{archivo.contrato.fechaLabel}" />
+                        </p:column>
+                        
+                        <p:column headerText="PLAZO" >
+                            <f:facet name="header">PLAZO</f:facet>
+                            <h:outputText value="#{archivo.contrato.plazo}" />
+                        </p:column>
+                        
+                        <p:column headerText="INICIO" >
+                            <f:facet name="header">INICIO</f:facet>
+                            <h:outputText value="#{archivo.contrato.fechaInicioLabel}" />
+                        </p:column>
+                        
+                        <p:column headerText="FIN" >
+                            <f:facet name="header">FIN</f:facet>
+                            <h:outputText value="#{archivo.contrato.fechaFinLabel}" />
+                        </p:column>
+                        
+                        <p:column headerText="FECHA ORDEN" >
+                            <f:facet name="header">FECHA ORDEN</f:facet>
+                            <h:outputText value="#{archivo.contrato.fechaOrdenLabel}" />
+                        </p:column>
+                        
+                        <p:column headerText="UNIDAD TECNICA" >
+                            <f:facet name="header">UNIDAD TECNICA</f:facet>
+                            <h:outputText value="#{archivo.contrato.unidad.nombreUnidad}" />
+                        </p:column>
+                        <p:column headerText="ADMINISTRADOR DEL CONTRATO" >
+                            <f:facet name="header">ADMINISTRADOR DEL CONTRATO</f:facet>
+                            <h:outputText value="#{archivo.contrato.admin}" />
+                        </p:column>
+                        
+                        <p:column headerText="PROVEEDOR" filterBy="#{archivo.contrato.contratista.nombre}" filterMatchMode="contains"  >
+                            <f:facet name="header">PROVEEDOR</f:facet>
+                            <h:outputText value="#{archivo.contrato.contratista.nombre}" />
+                        </p:column>
+                            
+                        
+                        <p:column headerText="FUENTE" filterBy="#{archivo.contrato.fuente.codigo}" filterMatchMode="contains" >
+                            <f:facet name="header">FUENTE</f:facet>
+                            <h:outputText value="#{archivo.contrato.fuente.codigo}" />
+                        </p:column>
+                        
+                        <p:column headerText="METODO ADQUISICION" filterBy="#{archivo.contrato.proceso.metodo.nombre}" filterMatchMode="contains"  >
+                            <f:facet name="header">METODO ADQUISICION</f:facet>
+                            <h:outputText value="#{archivo.contrato.proceso.metodo.nombre}" />
+                        </p:column>
+                            
+                        
+                        <p:column headerText="PROCESO" filterBy="#{archivo.contrato.proceso.codProceso}" filterMatchMode="contains"  >
+                            <f:facet name="header">PROCESO</f:facet>
+                            <h:outputText value="#{archivo.contrato.proceso.codProceso}" />
+                        </p:column>
+                        
+                        
+                        <p:column headerText="DESCRIPCION" width="300" style="width: 300px !important;">
+                            <f:facet name="header">DESCRIPCION</f:facet>
+                            <h:outputText value="#{archivo.contrato.proceso.descripcion}" />
+                        </p:column>
+                        
+                        <p:column headerText="SIAP" filterBy="#{archivo.contrato.proceso.siap}" filterMatchMode="contains"  >
+                            <f:facet name="header">SIAP</f:facet>
+                            <h:outputText value="#{archivo.contrato.proceso.siap}" />
+                        </p:column>
+                        
+                        <p:column headerText="NUMERO DE COMPROMISO PRESUPUESTARIO" >
+                            <f:facet name="header">NUMERO DE COMPROMISO PRESUPUESTARIO</f:facet>
+                            <h:outputText value="#{archivo.contrato.compromisoPresup}" />
+                        </p:column>
+                        
+                            
+                        
+                        <p:column headerText="NUMERO RESOLUCION DE ADJUDICACION" >
+                            <f:facet name="header">NUMERO RESOLUCION DE ADJUDICACION</f:facet>
+                            <h:outputText value="#{archivo.contrato.adjudicacion}" />
+                        </p:column>
+                            
+                        <p:column headerText="FORMA DE PAGO" >
+                            <f:facet name="header">FORMA DE PAGO</f:facet>
+                            <h:outputText value="#{archivo.contrato.formaPago}" />
+                        </p:column>
+                        
+                        <p:column headerText="MONTO CONTRATADO" >
+                            <f:facet name="header">MONTO CONTRATADO</f:facet>
+                            <h:outputText value="#{archivo.contrato.monto}" />
+                        </p:column>
+                        
+                            <p:column headerText="ESTATUS CONTRATO" filterBy="#{archivo.contrato.estatusContrato.estado}" filterMatchMode="contains"  >
+                            <f:facet name="header">ESTATUS CONTRATO</f:facet>
+                            <h:outputText value="#{archivo.contrato.estatusContrato.estado}" />
+                        </p:column>
+                        
+                        <p:column headerText="CAJA" filterBy="#{archivo.caja}" filterMatchMode="contains"  >
+                            <f:facet name="header">CAJA</f:facet>
+                            <h:outputText value="#{archivo.caja}" />
+                        </p:column>
+                        
+                        <p:column headerText="AMPO" >
+                            <f:facet name="header">AMPO</f:facet>
+                            <h:outputText value="#{archivo.ampo}" />
+                        </p:column>
+                        
+                        <p:column headerText="RECIBIDO POR" >
+                            <f:facet name="header">RECIBIDO POR</f:facet>
+                            <h:outputText value="#{archivo.registradoPor}" />
+                        </p:column>
+                        
+                        <p:column headerText="FOLIO" >
+                            <f:facet name="header">FOLIO</f:facet>
+                            <h:outputText value="#{archivo.estatusFolio.estado}" />
+                        </p:column>
+                        
+                        <p:column headerText="FECHA ENTREGA" >
+                            <f:facet name="header">FECHA ENTREGA</f:facet>
+                            <h:outputText value="#{archivo.fechaEntregaLabel}" />
+                        </p:column>
+                        
+                            <p:column headerText="N&deg; PAG" >
+                            <f:facet name="header">N&deg; PAG</f:facet>
+                            <h:outputText value="#{archivo.numpag}" />
+                        </p:column>
+                        
+                        <p:column headerText="DIGITALIZACION" >
+                            <f:facet name="header">DIGITALIZACION</f:facet>
+                            <h:outputText value="#{archivo.estatusDigit.estado}" />
+                        </p:column>
+                        
+                        <p:column headerText="OBSERVACIONES" >
+                            <f:facet name="header">OBSERVACIONES</f:facet>
+                            <h:outputText value="#{archivo.nota}" />
+                        </p:column>
+                        
+                        
+                    </p:dataTable>
+                        
+                        </p:scrollPanel>
+            </h:form>
+            
+            
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+            
+            
+            <!-- REPORTE EN PDF -->
+        <p:dialog widgetVar="rptArchivos" header="LISTA DE ARCHIVOS"  appendTo="@(body)"   width="60%" height="500"  >
+            <h:form id="frmRptArchivos" >
+                <object type="application/pdf" data="#{funciones.pathServletRptArchivos}"  width="100%" height="500" >
+
+                </object>
+            </h:form>
+        </p:dialog>
+        </ui:define>
+        
+        
+        
+        
+    </ui:composition>
+</html>
+

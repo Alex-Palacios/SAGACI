@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- VER INFO CONTRATO-->
+        
+        <p:dialog widgetVar="verContrato" header="VER INFORMACION CONTRATO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+            <h:form id="frmVerContrato">
+                <p:panelGrid columns="4" >
+                    <p:outputLabel value="N&deg; CONTRATO:" />
+                    <p:outputLabel value="#{contratoController.selected.numero}" />
+                    <p:outputLabel value="FECHA DOCUMENTO:" />
+                    <p:outputLabel value="#{contratoController.selected.fechaLabel}" />
+                    <p:outputLabel value="PROCESO:"  />
+                    <p:outputLabel value="#{contratoController.selected.proceso.codProceso}" />
+                    <p:outputLabel value="CONTRATISTA:" />
+                    <p:outputLabel value="#{contratoController.selected.contratista.nombre}" />
+                    <p:outputLabel value="PLAZO:" />
+                    <p:outputLabel value="#{contratoController.selected.plazo}" />
+                    <p:outputLabel value="FECHA INICIO:" />
+                    <p:outputLabel value="#{contratoController.selected.fechaInicioLabel}" />
+                    <p:outputLabel value="FECHA FIN:"  />
+                    <p:outputLabel value="#{contratoController.selected.fechaFinLabel}" />
+                    <p:outputLabel value="FECHA ORDEN:" />
+                    <p:outputLabel value="#{contratoController.selected.fechaOrdenLabel}" />
+                    <p:outputLabel value="MONTO:" />
+                    <p:outputLabel value="#{contratoController.selected.monto}" />
+                    <p:outputLabel value="ADMINISTRADOR:" />
+                    <p:outputLabel value="#{contratoController.selected.admin}"  />
+                    <p:outputLabel value="UNIDAD TECNICA:" />
+                    <p:outputLabel value="#{contratoController.selected.unidad}" />
+                    <p:outputLabel value="N&deg; ADJUDICACION:" />
+                    <p:outputLabel value="#{contratoController.selected.adjudicacion}" />
+                    <p:outputLabel value="FORMA PAGO:" />
+                    <p:outputLabel value="#{contratoController.selected.formaPago}" />
+                    <p:outputLabel value="COMPROMISO PRESUPUESTARIO:" />
+                    <p:outputLabel value="#{contratoController.selected.compromisoPresup}" />
+                    <p:outputLabel value="FUENTE FINANCIAMIENTO:" />
+                    <p:outputLabel value="#{contratoController.selected.fuente}" />
+                    <p:outputLabel value="RESOLUCION MODIFICATIVA:" />
+                    <p:outputLabel value="#{contratoController.selected.modificativa}" />
+                    <p:outputLabel value="ESTADO:" />
+                    <p:outputLabel value="#{contratoController.selected.estatusContrato}" />
+                    <p:outputLabel value="NOTA:" />
+                    <p:outputLabel value="#{contratoController.selected.nota}"  />
+                    <p:outputLabel value="REGISTRADO POR:"  />
+                    <p:outputLabel value="#{contratoController.selected.registradoPor}" />
+                    <p:outputLabel value="FECHA REGISTRO:"  />
+                    <p:outputLabel value="#{contratoController.selected.fechaIngresoLabel}" />
+                    <p:outputLabel value="MODIFICADO POR:"  />
+                    <p:outputLabel value="#{contratoController.selected.registradoPor}" />
+                    <p:outputLabel value="ULTIMA MODIFICACION"  />
+                    <p:outputLabel value="#{contratoController.selected.fechaModificadoLabel}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+                    
+</html>
+

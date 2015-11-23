@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">CONTRATOS</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="NUEVO CONTRATO" icon="ui-icon-plus"  actionListener="#{contratoController.prepareCreate}" oncomplete="PF('crearContrato').show()" update=":frmCrearContrato" disabled="#{!seguridadController.p7.insert}" /> 
+                    
+                    
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmContratos">
+                
+                    <p:outputLabel value="A&Ntilde;O:" /><p:selectOneMenu value="#{contratoController.anioRegistro}" editable="true" style="margin-bottom: -5px;">
+                                                            <f:selectItems  value="#{funciones.ultimos5AniosNULL}" />
+                                                            <p:ajax listener="#{contratoController.recreateModel}" update="dtContratos"/>
+                                                        </p:selectOneMenu>
+                
+                    <br/><br/>
+                    <p:contextMenu for="dtContratos"> 
+                        <p:menuitem value="Ver" oncomplete="PF('verContrato').show()" update=":frmVerContrato" icon="ico-ver" styleClass="menu-context" />  
+                        <p:menuitem value="Editar" oncomplete="PF('editarContrato').show()" update=":frmEditarContrato" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p7.update}"/>  
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarContrato').show()" update=":frmEliminarContrato" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p7.delete}" />  
+                    </p:contextMenu>
+                    <h:commandLink style="float: left"> 
+                            <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                            <p:dataExporter type="xls" target="dtContratos" fileName="CONTRATOS_#{contratoController.anioRegistro}" postProcessor="#{funciones.postProcessXLS_CONTRATOS}" />  
+                     </h:commandLink>
+                    <p:dataTable id="dtContratos" var="contrato" value="#{contratoController.items}" filteredValue="#{contratoController.filtroContratos}"
+                                 selection="#{contratoController.selected}" rowKey="#{contrato.id}" selectionMode="single"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" liveScroll="true" style="margin-bottom:0"
+                                 paginator="true" rows="25" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO EXISTEN CONTRATOS REGISTRADOS" >
+                        
+                        <p:column headerText="N&deg; CONTRATO" filterBy="#{contrato.numero}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">N&deg; CONTRATO</f:facet>
+                            <h:outputText value="#{contrato.numero}" />
+                        </p:column>
+                        <p:column headerText="FECHA DOC" >
+                            <f:facet name="header">FECHA DOC</f:facet>
+                            <h:outputLabel value="#{contrato.fechaLabel}"/>
+                        </p:column>
+                        <p:column headerText="PROCESO" filterBy="#{contrato.proceso.codProceso}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">PROCESO</f:facet>
+                            <h:outputText value="#{contrato.proceso.codProceso}" />
+                        </p:column>
+                        <p:column headerText="FUENTE FINANCIAMIENTO" filterBy="#{contrato.fuente.codigo}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">FUENTE FINANCIAMIENTO</f:facet>
+                            <h:outputText value="#{contrato.fuente.codigo}"/>
+                        </p:column>
+                        <p:column headerText="CONTRATISTA" filterBy="#{contrato.contratista}" filterMatchMode="contains" filterStyle="width:80%;" style="width: 20%;" >
+                            <f:facet name="header">CONTRATISTA</f:facet>
+                            <h:outputText value="#{contrato.contratista.nombre}" />
+                        </p:column>
+                        <p:column headerText="FECHA INICIO" >
+                            <f:facet name="header">FECHA INICIO</f:facet>
+                            <h:outputText value="#{contrato.fechaInicioLabel}" />
+                        </p:column>
+                        <p:column headerText="FECHA FIN" >
+                            <f:facet name="header">FECHA FIN</f:facet>
+                            <h:outputText value="#{contrato.fechaFinLabel}" />
+                        </p:column>
+                        <p:column headerText="PLAZO" >
+                            <f:facet name="header">PLAZO</f:facet>
+                            <h:outputText value="#{contrato.plazo}" />
+                        </p:column>
+                        <p:column headerText="MONTO" >
+                            <f:facet name="header">MONTO</f:facet>
+                            <h:outputText value="#{contrato.monto == 0?'S/E':contrato.montoRedondeado}" />
+                        </p:column>
+                        <p:column headerText="MODIFICATIVA" style="width: 7%;"  >
+                            <f:facet name="header">MODIFICATIVA</f:facet>
+                            <h:outputText value="#{contrato.modificativa}" />
+                        </p:column>
+                        <p:column headerText="NOTA" >
+                            <f:facet name="header">NOTA</f:facet>
+                            <h:outputText value="#{contrato.nota}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+            </h:form>
+            
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+        </ui:define>
+</ui:composition>
+</html>
+

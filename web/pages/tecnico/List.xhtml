@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">TECNICOS GACI</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="AGREGAR TECNICO" icon="ui-icon-plus" actionListener="#{tecnicoController.prepareCreate}" oncomplete="PF('crearTecnico').show()" update=":frmCrearTecnico" disabled="#{!seguridadController.p1.insert}" /> 
+                                        
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                 </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmTecnicos">
+                
+                    <p:contextMenu for="dtTecnicos"> 
+                        <p:menuitem value="Ver" oncomplete="PF('verTecnico').show()" update=":frmVerTecnico" icon="ico-ver" styleClass="menu-context" />  
+                        <p:menuitem value="Editar" oncomplete="PF('editarTecnico').show()" update=":frmEditarTecnico" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p1.update}" />  
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarTecnico').show()" update=":frmEliminarTecnico" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p1.delete}" />  
+                    </p:contextMenu>
+                <h:commandLink style="float: left"> 
+                       <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                       <p:dataExporter type="xls" target="dtTecnicos" fileName="TECNICOS" postProcessor="#{funciones.postProcessXLS_TECNICO}"  />  
+                </h:commandLink>
+                    <p:dataTable id="dtTecnicos" var="tecnico" value="#{tecnicoController.items}" filteredValue="#{tecnicoController.filtroTecnicos}"
+                                 selection="#{tecnicoController.selected}" rowKey="#{tecnico.id}" selectionMode="single"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" style="margin-bottom:0"
+                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="LISTA DE TECNICOS VACIA" >
+
+                        <p:column filterBy="#{tecnico.nombre}" filterMatchMode="contains">
+                            <f:facet name="header">NOMBRE</f:facet>
+                            <h:outputText value="#{tecnico.nombre}" />
+                        </p:column>
+                        
+                        <p:column>
+                            <f:facet name="header">TEL</f:facet>
+                            <h:outputText value="#{tecnico.tel}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">CORREO</f:facet>
+                            <h:outputText value="#{tecnico.correo}" />
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">NOTA</f:facet>
+                            <h:outputText value="#{tecnico.nota}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+            </h:form>
+            
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+        </ui:define>
+</ui:composition>
+</html>
+

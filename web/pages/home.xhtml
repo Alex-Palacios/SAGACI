@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="title">HOME</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="MI CUENTA" icon="ui-icon-person" url="#{bundle.url_cuenta}" />  
+                    
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            <h:form id="comando">
+                <p:remoteCommand autoRun="true" actionListener="#{garantiaController.verificarVencidas}" update=":msg"/>
+            </h:form>
+            <br/><br/>
+            <br/><br/>
+            BIENVENID@ #{seguridadController.usuario.userId.nombres} #{seguridadController.usuario.userId.apellidos}  al “Sistema de Administración de Garantías de Proveedores de la Unidad de Adquisiciones y Contrataciones Institucionales” – SAGACI – del Ministerio de Educación.
+            <br/><br/> Este sistema tiene como objetivo principal la sistematización del proceso de recepción y resguardo de garantías de proveedores y un pequeño control del área de archivo de la UACI para poder tener un mejor control sobre dichos documentos.
+            <br/><br/> El sistema es una aplicación web que se encuentra instalada en la intranet (Red Interna) del MINED y provee una interfaz gráfica que se accede atraves de un explorador o navegador web como Internet Explorer, Firefox o Chrome.
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

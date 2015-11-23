@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- EDITAR INFO PROVEEDOR-->
+    <p:dialog widgetVar="editarProveedor" header="ACTUALIZAR INFORMACION PROVEEDOR"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p4.update}">
+
+        <h:form id="frmEditarProveedor">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="NOMBRE PROVEEDOR:" for="nombre" />
+                <p:inputText id="nombre" value="#{proveedorController.selected.nombre}" maxlength="255" required="true" requiredMessage="NOMBRE DE PROVEEDOR REQUERIDO" size="50"   />
+                <p:outputLabel value="NATURALEZA:" for="naturaleza" />
+                <p:selectOneMenu id="naturaleza" value="#{proveedorController.selected.naturaleza}" required="true" requiredMessage="NATURALEZA DE PROVEEDOR REQUERIDO"
+                                >
+                    <f:selectItem itemValue="1" itemLabel="NATURAL" />
+                    <f:selectItem itemValue="2" itemLabel="JURIDICA" />
+                </p:selectOneMenu>
+                <p:outputLabel value="NIT:" for="nit" />
+                <p:inputMask id="nit" value="#{proveedorController.selected.nit}" maxlength="17"  mask="9999-999999-999-9" />
+                <p:outputLabel value="TELEFONO:" for="tel" />
+                <p:inputMask id="tel" value="#{proveedorController.selected.tel}" maxlength="9" mask="9999-9999" />
+                <p:outputLabel value="CORREO:" for="correo" />
+                <p:inputText id="correo" value="#{proveedorController.selected.correo}" maxlength="100" validatorMessage="Correo invalido" size="50" >
+                    <!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$"  /> -->
+                </p:inputText>
+                <p:outputLabel value="CONTACTO/REPRESENTANTE LEGAL:" for="contacto" />
+                <p:inputText id="contacto" value="#{proveedorController.selected.contacto}" maxlength="100" size="50"  />
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{proveedorController.selected.nota}" cols="50" rows="2" />
+
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{proveedorController.update}"  update=":frmEditarProveedor,:msg,:frmProveedores" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarProveedor').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+</html>
+

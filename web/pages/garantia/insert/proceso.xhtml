@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+   
+    
+    <!-- CREAR PROCESO-->
+    
+    <p:dialog widgetVar="crearProceso" header="NUEVO PROCESO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p3.insert}">
+
+        <h:form id="frmCrearProceso">
+            <p:growl id="msgProceso" life="5000"/>
+            <p:panelGrid columns="3" >
+                <p:outputLabel value="METODO ADQUISICION:" for="metodoAdq" />
+                <p:selectOneMenu id="metodoAdq" value="#{procesoController.newItem.metodo}" required="true" requiredMessage="METODO DE ADQUISICION REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{metodoAdqController.itemsSelectMenu}" var="m" itemDescription="#{m.nombre}"  />
+                </p:selectOneMenu>
+                <br/>
+                <p:outputLabel value="PROCESO NUMERO:" for="numProceso" />
+                <p:inputText id="numProceso" value="#{procesoController.newItem.numero}" maxlength="50" required="true" requiredMessage="NUMERO DE PROCESO REQUERIDO" size="50"  />
+                <br/>
+                <p:outputLabel value="SIAP:" for="siap" />
+                <p:inputText id="siap" value="#{procesoController.newItem.siap}" maxlength="50" required="false" requiredMessage="NUMERO DE SIAP REQUERIDO"  />
+                <br/>
+                <p:outputLabel value="NOMBRE DE LICITACION O CONCURSO:" for="descripcion" />
+                <p:inputTextarea id="descripcion" value="#{procesoController.newItem.descripcion}" cols="50" rows="5" required="true" requiredMessage="DESCRIPCION REQUERIDA"  />
+                <br/>
+                <p:outputLabel value="TECNICO RESPONSABLE:" for="tecnico" />
+                <p:selectOneMenu id="tecnico" value="#{procesoController.newItem.tecnico}" required="true" requiredMessage="TECNICO RESPONSABLE REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{tecnicoController.itemsAvailableSelectOne}"  />
+                </p:selectOneMenu>
+                <p:commandButton icon="ui-icon-plus" iconPos="center" actionListener="#{tecnicoController.prepareCreate}" oncomplete="PF('crearTecnico').show()" update=":frmCrearTecnico" process="@this"  />
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{procesoController.newItem.nota}" cols="50" rows="2" />
+                <br/>
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="GUARDAR" actionListener="#{garantiaController.createProceso}"  update=":frmCrearProceso,:frmCrearGarantia:proceso" icon="ui-icon-disk" />
+            <p:commandButton value="CANCELAR" onclick="PF('crearProceso').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+
+</html>
+

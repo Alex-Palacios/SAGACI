@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="title">MI CUENTA</ui:define>
+        
+        <ui:define name="contenido">
+            <h:form id="frmCuenta">
+                <br/><br/>
+                <p:panelGrid id="pnCuenta" style="margin: auto;" >
+                    <p:row>
+                        <p:column colspan="2" style="text-align: center;">
+                            <p:graphicImage library="images" name="logeado.jpg" width="200px" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="NOMBRE:" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{seguridadController.usuario.userId.nombres}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="APELLIDO:" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{seguridadController.usuario.userId.apellidos}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="TIPO DE USUARIO:" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{seguridadController.usuario.idGrupo.descripcion}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="USERNAME:" style="font-weight: bold;" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{seguridadController.usuario.login}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel value="ESTADO:" />
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{seguridadController.usuario.userId.lbActivo}" style="#{seguridadController.usuario.userId.styleClassEstado}" />
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                
+                <br/>
+                <div align="center">
+                    <p:commandButton value="CAMBIAR USERNAME" actionListener="#{seguridadController.prepareUpdateCredenciales}" oncomplete="updateUser.show();"  update=":frmUpdateUsername" style="width: 150px; margin: auto;" />
+                    &nbsp;&nbsp;
+                    <p:commandButton value="CAMBIAR CONTRASE&Ntilde;A" actionListener="#{seguridadController.prepareUpdateCredenciales}" oncomplete="updatePassword.show();" update=":frmUpdatePassword"  style="width: 150px; margin: auto;"/>
+                </div>
+                
+            </h:form>
+            
+            
+            
+            <!-- DIALOGOS -->
+            <p:dialog widgetVar="updateUser" header="CAMBIANDO USERNAME"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmUpdateUsername">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="USERNAME ACTUAL:" />
+                        <p:outputLabel value="#{seguridadController.usuario.login}" />
+                        
+                        <p:outputLabel value="NUEVO USERNAME:" for="newUsername" />
+                        <p:inputText id="newUsername" value="#{seguridadController.nuevoUsername}" maxlength="20" required="true" requiredMessage="NUEVO USERNAME REQUERIDO"  />
+
+                    </p:panelGrid>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{seguridadController.cambiarUsername}" update=":frmUpdateUsername,:msg,:frmCuenta" icon="ui-icon-refresh" process="@form" />
+                    <p:commandButton value="CANCELAR" onclick="updateUser.hide();" icon="ui-icon-cancel" style="float: right;" />
+
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <p:dialog widgetVar="updatePassword" header="CAMBIANDO PASSWORD"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmUpdatePassword">
+                    <p:panelGrid id="cambioPassword" columns="2"  >
+                        <p:outputLabel value="PASSWORD ACTUAL:"  for="pwdActual"/>
+                        <p:password id="pwdActual" value="#{seguridadController.passwordAnterior}" required="true" requiredMessage="Ingrese Contrase&ntilde;a ACTUAL"/>
+                        
+                        <h:outputLabel value="NUEVO PASSWORD: " for="pwd1" />  
+                        <p:password id="pwd1" value="#{seguridadController.nuevoPassword}" match="pwd2" label="NUEVO PASSWORD" validatorMessage="CONTRASEÑAS NO COINCIDEN" required="true" requiredMessage="Ingrese Nueva Contrase&ntilde;a"/>  
+
+                        <h:outputLabel value="REPITA PASSWORD:" for="pwd2" />  
+                        <p:password id="pwd2" value="#{seguridadController.nuevoPassword}"  required="true" requiredMessage="Repita la nueva Contrase&ntilde;a"/>  
+                    </p:panelGrid>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{seguridadController.cambiarPassword}"    update=":frmUpdatePassword,:msg,cambioPassword" process="@form" icon="ui-icon-refresh" />
+                    <p:commandButton value="CANCELAR" onclick="updatePassword.hide();" icon="ui-icon-cancel" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

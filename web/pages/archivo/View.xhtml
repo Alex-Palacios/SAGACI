@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- VER INFO ARCHIVO-->
+        
+        <p:dialog widgetVar="verArchivo" header="VER INFORMACION ARCHIVO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+            <h:form id="frmVerArchivo">
+                <p:panelGrid columns="4"  >
+                    <f:facet name="header">INFORMACION DE CONTRATO</f:facet>
+                    <p:outputLabel value="N&deg; CONTRATO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.numero}" />
+                    <p:outputLabel value="FECHA DOCUMENTO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fechaLabel}" />
+                    <p:outputLabel value="PROCESO:"  />
+                    <p:outputLabel value="#{archivoController.selected.contrato.proceso.numero}" />
+                    <p:outputLabel value="CONTRATISTA:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.contratista.nombre}" />
+                    <p:outputLabel value="PLAZO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.plazo}" />
+                    <p:outputLabel value="FECHA INICIO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fechaInicioLabel}" />
+                    <p:outputLabel value="FECHA FIN:"  />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fechaFinLabel}" />
+                    <p:outputLabel value="FECHA ORDEN:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fechaOrdenLabel}" />
+                    <p:outputLabel value="MONTO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.monto}" />
+                    <p:outputLabel value="ADMINISTRADOR:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.admin}"  />
+                    <p:outputLabel value="UNIDAD TECNICA:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.unidad.nombreUnidad}" />
+                    <p:outputLabel value="N&deg; ADJUDICACION:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.adjudicacion}" />
+                    <p:outputLabel value="FORMA PAGO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.formaPago}" />
+                    <p:outputLabel value="COMPROMISO PRESUPUESTARIO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.compromisoPresup}" />
+                    <p:outputLabel value="FUENTE FINANCIAMIENTO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fuente.codigo}" />
+                    <p:outputLabel value="RESOLUCION MODIFICATIVA:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.modificativa}" />
+                    <p:outputLabel value="ESTADO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.estatusContrato.estado}" />
+                    <p:outputLabel value="REGISTRADO POR:"  />
+                    <p:outputLabel value="#{archivoController.selected.contrato.registradoPor}" />
+                    <p:outputLabel value="FECHA REGISTRO:"  />
+                    <p:outputLabel value="#{archivoController.selected.contrato.fechaIngresoLabel}" />
+                </p:panelGrid>
+                <p:panelGrid columns="4" >
+                    <f:facet name="header">INFORMACION DE ARCHIVO</f:facet>
+                    <p:outputLabel value="CAJA:" for="caja" />
+                    <p:outputLabel id="caja" value="#{archivoController.selected.caja}" />
+                    <p:outputLabel value="AMPO:" for="ampo" />
+                    <p:outputLabel id="ampo" value="#{archivoController.selected.ampo}"/>
+                    <p:outputLabel value="FOLIO:" for="estadoFolio" />
+                    <p:outputLabel id="estadoFolio" value="#{archivoController.selected.estatusFolio}" />
+                    <p:outputLabel value="NUMERO DE PAGINAS:"  for="numPag"/>
+                    <p:outputLabel id="numPag" value="#{archivoController.selected.numpag}" />
+                    <p:outputLabel value="FECHA DE ENTREGA:" for="fechaEntrega" />
+                    <p:outputLabel id="fechaEntrega" value="#{archivoController.selected.fechaEntrega}" />
+                    <p:outputLabel value="DIGITALIZACION:" for="estadoDigit" />
+                    <p:outputLabel id="estadoDigit" value="#{archivoController.selected.estatusDigit.estado}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+                    
+</html>
+

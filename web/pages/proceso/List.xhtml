@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">PROCESOS</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                    <p:menuitem value="REGISTRAR PROCESO" icon="ui-icon-plus" actionListener="#{procesoController.prepareCreate}" oncomplete="PF('crearProceso').show()" update=":frmCrearProceso" disabled="#{!seguridadController.p3.insert}" /> 
+                                        
+                    <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                        <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                     </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmProcesos">
+                
+                <p:outputLabel value="REGISTRADOS EN: " /><p:selectOneMenu value="#{procesoController.anioRegistro}" editable="true" style="margin-bottom: -5px;">
+                                                                <f:selectItems  value="#{funciones.ultimos5Anios}"  />
+                                                                <p:ajax listener="#{procesoController.recreateModel}" update="dtProcesos"/>
+                                                          </p:selectOneMenu>
+
+                    
+                    <br/><br/>
+                    <p:contextMenu for="dtProcesos"> 
+                        <p:menuitem value="Ver" oncomplete="PF('verProceso').show()" update=":frmVerProceso" icon="ico-ver" styleClass="menu-context" />  
+                        <p:menuitem value="Editar" oncomplete="PF('editarProceso').show()" update=":frmEditarProceso" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p3.update}" />  
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarProceso').show()" update=":frmEliminarProceso" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p3.delete}"/>  
+                    </p:contextMenu>
+                    <h:commandLink style="float: left"> 
+                            <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                            <p:dataExporter type="xls" target="dtProcesos" fileName="PROCESOS_#{procesoController.anioRegistro}" postProcessor="#{funciones.postProcessXLS_PROCESOS}" />  
+                     </h:commandLink>
+                    <p:dataTable id="dtProcesos" var="proceso" value="#{procesoController.items}" filteredValue="#{procesoController.filtroProcesos}"
+                                 selection="#{procesoController.selected}" rowKey="#{proceso.id}" selectionMode="single" 
+                                 scrollable="true" scrollRows="20" scrollHeight="400" liveScroll="true" style="margin-bottom:0"
+                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO EXISTEN PROCESOS REGISTRADOS"  >
+                        
+                        <p:column headerText="METODO ADQUISICION" filterBy="#{proceso.metodo}" filterMatchMode="exact" filterOptions="#{metodoAdqController.itemsAvailableSelectOne}" filterStyleClass="selectFilter">
+                            <f:facet name="header">METODO ADQUISICION</f:facet>
+                            <h:outputText value="#{proceso.metodo.nombre}" />
+                        </p:column>
+                        
+                        <p:column headerText="PROCESO" filterBy="#{proceso.numero}">
+                            <f:facet name="header">PROCESO</f:facet>
+                            <h:outputText value="#{proceso.numero}" />
+                        </p:column>
+                        
+                        <p:column headerText="SIAP" >
+                            <f:facet name="header">SIAP</f:facet>
+                            <h:outputText value="#{proceso.siap}" />
+                        </p:column>
+                        
+                        <p:column headerText="NOMBRE DE LICITACION O CONCURSO" style="width: 40%;" >
+                            <f:facet name="header">NOMBRE DE LICITACION O CONCURSO</f:facet>
+                            <h:outputText value="#{proceso.descripcion}" />
+                        </p:column>
+                        
+                        <p:column headerText="TECNICO RESPONSABLE" filterBy="#{proceso.tecnico}" filterMatchMode="contains">
+                            <f:facet name="header">TECNICO RESPONSABLE</f:facet>
+                            <h:outputText value="#{proceso.tecnico.nombre}" />
+                        </p:column>
+                        
+                        <p:column headerText="OBSERVACIONES" >
+                            <f:facet name="header">OBSERVACIONES</f:facet>
+                            <h:outputText value="#{proceso.nota}" />
+                        </p:column>
+                    </p:dataTable>
+            </h:form>
+            
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+        </ui:define>
+</ui:composition>
+</html>
+

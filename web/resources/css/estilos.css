@@ -1,0 +1,225 @@
+root { 
+    display: block;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #3a4f54;
+    background-color: white;
+    font-size: small;
+}
+
+a {
+    color: #e33b06;
+}
+
+table {
+    empty-cells: show;
+}
+
+.ui-paginator-top{
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+
+
+form.jsfcrud_list_form th, td th {
+    font-size: x-small;
+    color: #4e6a71;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-color: #b2d5d6;
+    border-bottom-color: #b2d5d6;
+    border-left-color: #90b4bd;
+    border-right-color: #90b4bd;
+    letter-spacing: 3px;
+    text-align: left;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
+    background-color: #b2d5d6;
+}
+
+td {
+    vertical-align: top;
+    padding-bottom: 8px;
+    font-size: small;
+}
+
+form.jsfcrud_list_form td, td td {
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-left-style: solid;
+    border-right-style: solid;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-color: #b2d5d6;
+    border-bottom-color: #b2d5d6;
+    border-left-color: #b2d5d6;
+    border-right-color: #b2d5d6;
+    vertical-align: baseline;
+    padding-bottom: 0px;
+}
+
+tr.jsfcrud_odd_row {
+    background-color: #fefeff;
+    color: #4e6a71;
+}
+
+
+tr.jsfcrud_even_row {
+    background-color: #eff5fa;
+    color: #4e6a71;
+}
+
+
+
+#menuSecundario{
+    z-index: 100 !important;
+}
+
+.ui-layout-unit-content{
+    overflow: visible !important;
+}
+
+
+
+.ico-mined{
+    background-image: url('../resources/iconos/minedIco.gif') !important;
+    background-size: 20px,20px;
+}
+
+.ico-eliminar{
+    background-image: url('../resources/iconos/delete.gif') !important;
+    background-size: 20px,20px;
+}
+
+.ico-update{
+    background-image: url('../resources/iconos/update.png') !important;
+    background-size: 20px,20px;
+    background-position: -2px -2px;
+}
+
+.ico-tipo-user{
+    background-image: url('../resources/iconos/tipoUser.gif') !important;
+    background-size: 20px,20px;
+}
+
+.ico-user{
+    background-image: url('../resources/iconos/user.jpg') !important;
+    background-size: 20px,20px;
+}
+
+.ico-check{
+    background-image: url('../resources/iconos/check.gif') !important;
+    background-size: 20px,20px;
+}
+
+.ico-close{
+    background-image: url('../resources/iconos/close.jpg') !important;
+    background-size: 20px,20px;
+    background-position: -1px -2px;
+}
+
+.ico-logout{
+    background-image: url('../resources/iconos/logout.gif') !important;
+    background-size: 16px,16px;
+    background-position: 0px 1px;
+}
+
+.ico-proveedores{
+    background-image: url('../resources/iconos/proveedores.png') !important;
+    background-size: 20px,20px;
+    background-position: -2px -2px;
+}
+
+.ico-modificar{
+    background-image: url('../resources/iconos/modificar.jpg') !important;
+    background-size: 20px,20px;
+    background-position: -2px -2px;
+}
+
+.ico-ver{
+    background-image: url('../resources/iconos/ver.gif') !important;
+    background-size: 20px,20px;
+    background-position: -2px -2px;
+}
+
+.ico-pago{
+    background-image: url('../resources/iconos/dolar.png') !important;
+    background-size: 20px,20px;
+    background-position: -2px -2px;
+}
+
+
+.ico-plus{
+    background-image: url('../resources/iconos/plus.png') !important;
+    background-size: 20px,20px;
+}
+
+.ico-pdf{
+    background-image: url('../resources/iconos/pdf.png') !important;
+}
+
+.panel-login{
+    text-align: center; 
+    width: 50%;
+    height: 150px;
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    margin-top: -75px;  
+    margin-left: -25%; 
+}
+
+.datatable {
+    text-align: center;
+    font-size: 12px !important;
+}
+
+.datatable td{
+    font-size: 10px !important;
+}
+
+.color-activo{
+    color: green;
+    font-weight: bold;
+}
+
+.color-inactivo{
+    color: red;
+    font-weight: bold;
+}
+
+.color-fin{
+    color: blue;
+    font-weight: bold;
+}
+
+.color-warning{
+    color: orange;
+    font-weight: bold;
+}
+
+.menu-context{
+    width: auto !important;
+    font-size: 12px;
+}
+
+.ui-menu {
+    width: auto !important;
+}
+
+
+.selectFilter{
+    height: auto !important;
+}

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">CONFIGURACIONES</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+                
+                
+                <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu> 
+                
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            EN ESTA PAGINA SE CONFIGURAN LAS VARIABLES E INFO GLOBAL DE LA APLICACION PARA SU BUEN FUNCIONAMIENTO
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

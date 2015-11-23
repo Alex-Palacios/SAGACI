@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- ELIMINAR PROCESO-->
+        <p:dialog widgetVar="eliminarProceso" header="ELIMINAR PROCESO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p3.delete}" >
+
+            <h:form id="frmEliminarProceso" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE PROCESO:" />
+                <p:panelGrid columns="2" style="margin: auto;width: 500px;">
+                    <p:outputLabel value="PROCESO:" />
+                    <p:outputLabel value="#{procesoController.selected.metodo.codigo} #{procesoController.selected.numero}" />
+                    <p:outputLabel value="NOMBRE DE LICITACION O CONCURSO:" />
+                    <p:outputLabel value="#{procesoController.selected.descripcion}" />
+                    <p:outputLabel value="TECNICO RESPONSABLE:" />
+                    <p:outputLabel value="#{procesoController.selected.tecnico.nombreCompleto}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{procesoController.delete}" oncomplete="PF('eliminarProceso').hide()"  update=":msg,:frmProcesos" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarProceso').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+</html>
+

@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+                    
+                    <!-- ELIMINAR TECNICO-->
+                    <p:dialog widgetVar="eliminarTecnico" header="ELIMINAR TECNICO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p1.delete}" >
+
+                        <h:form id="frmEliminarTecnico" >
+                            <p:outputLabel value="SEGURO QUE DESEA ELIMINAR COMPLETAMENTE DEL SISTEMA EL SIGUIENTE TECNICO:" />
+                            <p:panelGrid columns="2" style="margin: auto">
+                                <p:outputLabel value="NOMBRE:" />
+                                <p:outputLabel value="#{tecnicoController.selected.nombre}" />
+                               <!-- <p:outputLabel value="APELLIDO:" />
+                                <p:outputLabel value="#{tecnicoController.selected.apellido}" />-->
+                            </p:panelGrid>
+                            <br/>
+                            <p:commandButton value="ELIMINAR" actionListener="#{tecnicoController.delete}" oncomplete="PF('eliminarTecnico').hide()"  update=":msg,:frmTecnicos" type="submit" icon="ico-eliminar" />
+                            <p:commandButton value="CANCELAR" onclick="PF('eliminarTecnico').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                        </h:form>
+                    </p:dialog>
+</html>
+

@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- EDITAR INFO TECNICO-->
+    <p:dialog widgetVar="editarTecnico" header="ACTUALIZAR INFORMACION TECNICO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p1.update}" >
+
+        <h:form id="frmEditarTecnico">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="NOMBRE:" for="nombre"/>
+                <p:inputText id="nombre" value="#{tecnicoController.selected.nombre}" maxlength="50" required="true" requiredMessage="NOMBRE DE TECNICO REQUERIDO" size="100" />
+               <!-- <p:outputLabel value="APELLIDO:" for="apellido" />
+                <p:inputText id="apellido" value="#{tecnicoController.selected.apellido}" maxlength="50" required="true" requiredMessage="APELLIDO DE TECNICO REQUERIDO" size="50"  /> -->
+                <p:outputLabel value="TEL:" for="tel" />
+                <p:inputText id="tel" value="#{tecnicoController.selected.tel}" maxlength="9"   />
+                <p:outputLabel value="CORREO:" for="correo" />
+                <p:inputText id="correo" value="#{tecnicoController.selected.correo}" maxlength="100" validatorMessage="Correo invalido" size="50" required="false" >
+                    <!--  <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /> -->
+                </p:inputText>
+                <p:outputLabel value="OBSERVACIONES:" for="nota" />
+                <p:inputTextarea id="nota" value="#{tecnicoController.selected.nota}" cols="30" rows="3"   />
+                
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{tecnicoController.update}"  update=":frmEditarTecnico,:msg,:frmTecnicos" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarTecnico').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+</html>
+
+
+

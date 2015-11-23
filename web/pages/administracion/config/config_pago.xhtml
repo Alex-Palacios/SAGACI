@@ -1,0 +1,120 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">PAGO CONFIG</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+                
+                
+                <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu>  
+                
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            CONFIGURACION DE VARIABLE PARA PAGO
+            <h:form id="frmConfig">
+                
+                <p:contextMenu for="dtTipoPago"> 
+                    <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarTipoPago').show()" update=":frmEditarTipoPago" styleClass="menu-context" />  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarTipoPago').show()" update=":frmEliminarTipoPago" styleClass="menu-context" />  
+                </p:contextMenu>
+
+                <p:dataTable id="dtTipoPago" var="tipoPago" value="#{tipoPagoController.items}" 
+                             selection="#{tipoPagoController.selected}" rowKey="#{tipoPago.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="TIPOS DE PAGO NO DEFINIDOS" >
+
+                    <f:facet name="header">TIPOS DE PAGO</f:facet>
+
+                    <p:column headerText="TIPO DE PAGO">
+                        #{tipoPago.nombreTipo}
+                    </p:column>
+                    
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{tipoPagoController.prepareCreate}" oncomplete="PF('crearTipoPago').show()" update=":frmCrearTipoPago" />
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearTipoPago" header="NUEVO TIPO DE PAGO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmCrearTipoPago">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="TIPO DE PAGO:" for="nombre" />
+                        <p:inputText id="nombre" value="#{tipoPagoController.newItem.nombreTipo}" maxlength="50" required="true" requiredMessage="TIPO DE PAGO REQUERIDO" size="40" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{tipoPagoController.create}"  type="submit" update=":frmCrearTipoPago,:msg,:frmConfig" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearTipoPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarTipoPago" header="ACTUALIZAR TIPO DE PAGO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmEditarTipoPago">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="TIPO DE PAGO:" for="nombre" />
+                        <p:inputText id="nombre" value="#{tipoPagoController.selected.nombreTipo}" maxlength="50" required="true" requiredMessage="NOMBRE DE ESTADO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{tipoPagoController.update}"  update=":frmEditarTipoPago,:msg,:frmConfig" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarTipoPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarTipoPago" header="ELIMINAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmEliminarTipoPago" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL TIPO :" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO:" />
+                        <p:outputLabel value="#{tipoPagoController.selected.nombreTipo}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{tipoPagoController.delete}" oncomplete="PF('eliminarTipoPago').hide()"  update=":msg,:frmConfig" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarTipoPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

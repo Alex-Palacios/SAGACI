@@ -1,0 +1,244 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+         <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">PAGOS</ui:define>
+        
+       <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="ARCHIVOS" action="#{archivoController.prepareList}" />
+                <p:menuitem value="CONTRATOS POR ARCHIVAR" action="#{archivoController.prepareListArchivar}" />
+                <p:menuitem value="VER PAGOS" action="#{pagoController.prepareList}" /> 
+                <p:menuitem value="FUENTES DE FINANCIAMIENTO" action="#{fuenteFinancController.prepareList}" /> 
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+             <h:form id="frmPagos">
+                 <p:selectOneRadio id="verPor" value="#{pagoController.listarPor}" >
+                     <p:ajax listener="#{pagoController.updateConsulta}" update=":frmPagos" process="@this"/>
+                    <f:selectItem itemLabel="Contratos" itemValue="CONTRATOS" />
+                    <f:selectItem itemLabel="Pagos" itemValue="PAGOS" />
+                </p:selectOneRadio>
+                 
+                 <c:choose id="tabla">
+                                  
+                    <!-- SI YA ESTA LOGEADO -->
+                    <c:when test="${pagoController.verPorPagos}" >
+                        
+                         <p:outputLabel value="A&Ntilde;O:" /><p:selectOneMenu value="#{pagoController.anio}" editable="true" style="margin-bottom: -5px;">
+                                                                <f:selectItems  value="#{funciones.ultimos5Anios}"  />
+                                                                <p:ajax listener="#{pagoController.recreateModel}" update="dtPagos" />
+                                                          </p:selectOneMenu>
+                 <br/><br/>     
+                 <p:contextMenu for="dtPagos"> 
+                    <p:menuitem value="Eliminar" oncomplete="PF('eliminarPago').show()" update=":frmEliminarPago" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p10.delete}" />  
+                </p:contextMenu>
+                 <h:commandLink style="float: left"> 
+                        <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                        <p:dataExporter type="xls" target="dtPagos" fileName="PAGOS_#{pagoController.anio}" postProcessor="#{funciones.postProcessXLS_PAGOS}" />  
+                 </h:commandLink>
+                 <p:dataTable id="dtPagos" var="pago" value="#{pagoController.items}" filteredValue="#{pagoController.filtroPagos}"
+                              selection="#{pagoController.selected}" rowKey="#{pago.id}" selectionMode="single"
+                              scrollable="true" scrollRows="20" scrollHeight="400" style="margin-bottom:0"
+                              paginator="true" rows="25" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                              styleClass="datatable" emptyMessage="NO SE HAN REGISTRADO PAGOS" rendered="#{pagoController.verPorPagos}" >
+
+                        <p:column headerText="CONTRATO" filterBy="#{pago.contrato.numero}" filterMatchMode="contains" >
+                            <f:facet name="header">CONTRATO</f:facet>
+                            <h:outputText value="#{pago.contrato.numero}" />
+                        </p:column>
+                        <p:column headerText="FECHA PAGO" >
+                            <f:facet name="header">FECHA PAGO</f:facet>
+                            <h:outputText value="#{pago.fechaLabel}" />
+                        </p:column>
+                        <p:column headerText="DOCUMENTO" filterBy="#{pago.documento}" filterMatchMode="contains"  >
+                            <f:facet name="header">DOCUMENTO</f:facet>
+                            <h:outputText value="#{pago.documento}" />
+                        </p:column>
+                        <p:column headerText="TIPO PAGO" filterBy="#{pago.tipo.nombreTipo}" filterMatchMode="contains" >
+                            <f:facet name="header">TIPO PAGO</f:facet>
+                            <h:outputText value="#{pago.tipo.nombreTipo}" />
+                        </p:column>
+                        <p:column headerText="MONTO" >
+                            <f:facet name="header">MONTO</f:facet>
+                            <h:outputText value="#{pago.monto}" />
+                        </p:column>
+                        <p:column headerText="FECHA REGISTRO" >
+                            <f:facet name="header">FECHA REGISTRO</f:facet>
+                            <h:outputText value="#{pago.fechaIngresoLabel}" />
+                        </p:column>
+                        <p:column headerText="NOTA">
+                            <f:facet name="header">NOTA</f:facet>
+                            <h:outputText value="#{pago.nota}" />
+                        </p:column>
+                        
+                    </p:dataTable>
+                    </c:when>
+                    
+                    
+                    
+                    
+                    <c:when test="${pagoController.verPorContratos}" >
+                          
+                        <p:outputLabel value="A&Ntilde;O:" /><p:selectOneMenu value="#{pagoController.anio}" editable="true" style="margin-bottom: -5px;">
+                                                                <f:selectItems  value="#{funciones.ultimos5AniosNULL}"  />
+                                                                <p:ajax listener="#{pagoController.recreateModelContratos}" update="dtContratos" />
+                                                          </p:selectOneMenu>
+                        
+                        <p:contextMenu for="dtContratos"> 
+                            <p:menuitem value="Registrar Pago" actionListener="#{pagoController.prepareRegistrarPagoContrato}" oncomplete="PF('registrarPago').show()" update=":frmRegistrarPago" icon="ui-icon-plus" styleClass="menu-context" disabled="#{!seguridadController.p10.insert}" />
+                        </p:contextMenu>
+                        <br/><br/>
+                        <p:dataTable id="dtContratos" var="contrato" value="#{pagoController.contratos}" filteredValue="#{pagoController.filtroContratos}"
+                                 selection="#{pagoController.selectedContrato}" rowKey="#{contrato.id}" selectionMode="single"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" liveScroll="true" style="margin-bottom:0"
+                                 paginator="true" rows="25" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO EXISTEN CONTRATOS REGISTRADOS" >
+                        <p:column style="width:2%" exportable="false">  
+                            <p:rowToggler  />  
+                        </p:column> 
+                        <p:column headerText="N&deg; CONTRATO" filterBy="#{contrato.numero}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            #{contrato.numero}
+                        </p:column>
+                        <p:column headerText="FECHA DOC" >
+                            <h:outputLabel value="#{contrato.fechaLabel}"/>
+                        </p:column>
+                        <p:column headerText="PROCESO" filterBy="#{contrato.proceso}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            #{contrato.proceso}
+                        </p:column>
+                        <p:column headerText="SIAP" filterBy="#{contrato.proceso.siap}"  filterStyle="width:80%;"  >
+                            #{contrato.proceso.siap}
+                        </p:column>
+                        <p:column headerText="CONTRATISTA" filterBy="#{contrato.contratista}" filterMatchMode="contains" filterStyle="width:80%;" style="width: 20%;" >
+                            #{contrato.contratista}
+                        </p:column>
+                        <p:column headerText="FECHA INICIO" >
+                            #{contrato.fechaInicioLabel}
+                        </p:column>
+                        <p:column headerText="FECHA FIN" >
+                            #{contrato.fechaFinLabel}
+                        </p:column>
+                        <p:column headerText="PLAZO" >
+                            #{contrato.plazo}
+                        </p:column>
+                        <p:column headerText="MONTO" >
+                            #{contrato.monto}
+                        </p:column>
+                        <p:column headerText="MODIFICATIVA" style="width: 7%;"  >
+                            #{contrato.modificativa}
+                        </p:column>
+                        <p:column headerText="NOTA" >
+                            #{contrato.nota}
+                        </p:column>
+                        
+                        <p:rowExpansion>
+                            
+                            <p:dataTable id="dtPagosContratos" var="pago" value="#{contrato.pagoList}" 
+                                         selection="#{contratoController.selectedPago}" rowKey="#{pago.id}" selectionMode="single"
+                                         scrollable="true" scrollHeight="100" emptyMessage="NO HAY PAGOS REGISTRADOS" >
+                                
+                                <p:column headerText="FECHA PAGO" >
+                                    #{pago.fechaLabel}
+                                </p:column>
+                                <p:column headerText="DOCUMENTO" >
+                                    #{pago.documento}
+                                </p:column>
+                                <p:column headerText="TIPO PAGO" >
+                                    #{pago.tipo.nombreTipo}
+                                </p:column>
+                                <p:column headerText="MONTO" >
+                                    #{pago.monto}
+                                </p:column>
+                            </p:dataTable>
+                        </p:rowExpansion>
+                    </p:dataTable>
+                        
+                        
+                    </c:when>
+                 </c:choose>
+                 
+                 
+                 
+            </h:form>
+            
+            
+            
+            
+                         <!-- INSERTAR PAGO -->
+                        <p:dialog widgetVar="registrarPago" header="REGISTRAR PAGO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                            <h:form id="frmRegistrarPago">
+                                <p:panelGrid columns="2" >
+                                    <p:outputLabel value="CONTRATO:" for="contrato" />
+                                    <p:outputLabel id="contrato" value="#{pagoController.selected.contrato.numero}"/>
+                                    <p:outputLabel value="MONTO CONTRATO:" for="montoC" />
+                                    <p:outputLabel id="montoC" value="#{pagoController.selected.contrato.monto == 0?'S/E':pagoController.selected.contrato.monto}" style="color: red;"/>
+                                    <p:outputLabel value="TOTAL PAGADO:" for="saldo" />
+                                    <p:outputLabel id="saldo" value="#{pagoController.selected.contrato.sumaPagos}" style="color: blue;"/>
+                                    <p:outputLabel value="FECHA PAGO" for="fechaP" />
+                                    <p:calendar id="fechaP" value="#{pagoController.selected.fecha}" mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA DE PAGO REQUERIDO" locale="sv"/>
+                                    <p:outputLabel value="DOCUMENTO" for="doc" />
+                                    <p:inputText id="doc" value="#{pagoController.selected.documento}" maxlength="50" />
+                                    <p:outputLabel value="TIPO PAGO" for="tipo" />
+                                    <p:selectOneMenu id="tipo" value="#{pagoController.selected.tipo}" required="true" requiredMessage="TIPO PAGO REQUERIDO" >
+                                        <f:selectItems  value="#{tipoPagoController.itemsAvailableSelectOne}"   />
+                                    </p:selectOneMenu>
+                                    <p:outputLabel value="MONTO PAGO" for="monto" />
+                                    <p:inputText id="monto" value="#{pagoController.selected.monto}" required="true" requiredMessage="MONTO REQUERIDO"  />
+                                    <p:outputLabel value="NOTA" for="nota" />
+                                    <p:inputText id="nota" value="#{pagoController.selected.nota}" size="50" />
+                                </p:panelGrid>
+                                <br/>
+                                <p:commandButton value="GUARDAR" actionListener="#{pagoController.registrarPagoContrato}"  type="submit" update="frmRegistrarPago,:msg,:frmPagos" icon="ui-icon-disk" />
+                                <p:commandButton value="CANCELAR" onclick="PF('registrarPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                            </h:form>
+                        </p:dialog>
+            
+                         
+                         
+                         
+                         
+                         <!-- ELIMINAR PAGO -->
+                         <p:dialog widgetVar="eliminarPago" header="ELIMINAR PAGO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p10.delete}"  >
+
+                            <h:form id="frmEliminarPago">
+                                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE PAGO:" />
+                                <p:panelGrid columns="2" style="margin: auto">
+                                    <p:outputLabel value="CONTRATO:" />
+                                    <p:outputLabel value="#{pagoController.selected.contrato.numero}" />
+                                    <p:outputLabel value="PROCESO:" />
+                                    <p:outputLabel value="#{pagoController.selected.contrato.proceso.codProceso}" />
+                                    <p:outputLabel value="FECHA PAGO:" />
+                                    <p:outputLabel value="#{pagoController.selected.fechaLabel}" />
+                                    <p:outputLabel value="TIPO PAGO:" />
+                                    <p:outputLabel value="#{pagoController.selected.tipo.nombreTipo}" />
+                                    <p:outputLabel value="MONTO:" />
+                                    <p:outputLabel value="#{pagoController.selected.monto}" />
+                                </p:panelGrid>
+                                <br/>
+                                <p:commandButton value="ELIMINAR" actionListener="#{pagoController.eliminarPagoContrato}"  type="submit" update="frmEliminarPago,:msg,:frmPagos" icon="ui-icon-disk" />
+                                <p:commandButton value="CANCELAR" onclick="PF('eliminarPago').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                            </h:form>
+                        </p:dialog>
+            
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

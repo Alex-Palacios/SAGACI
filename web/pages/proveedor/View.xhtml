@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+                    
+        <!-- VER INFO PROVEEDOR-->
+        
+        <p:dialog widgetVar="verProveedor" header="VER INFORMACION PROVEEDOR"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+            <h:form id="frmVerProveedor">
+                <p:panelGrid columns="2" >
+                    <p:outputLabel value="PROVEEDOR:" />
+                    <p:outputLabel value="#{proveedorController.selected.nombre}" />
+                    <p:outputLabel value="NATURALEZA:" />
+                    <p:outputLabel value="#{proveedorController.selected.naturalezaLabel}"/>
+                    <p:outputLabel value="NIT:" />
+                    <p:outputLabel value="#{proveedorController.selected.nit}" />
+                    <p:outputLabel value="TELEFONO:"  />
+                    <p:outputLabel value="#{proveedorController.selected.tel}" />
+                    <p:outputLabel value="CORREO:"  />
+                    <p:outputLabel value="#{proveedorController.selected.correo}" />
+                    <p:outputLabel value="CONTACTO/REPRESENTANTE LEGAL:"  />
+                    <p:outputLabel value="#{proveedorController.selected.contacto}"/>
+                    <p:outputLabel value="NOTA:"  />
+                    <p:outputLabel value="#{proveedorController.selected.nota}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+                    
+</html>
+

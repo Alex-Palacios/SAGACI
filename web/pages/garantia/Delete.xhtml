@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- ELIMINAR GARANTIA-->
+        
+        <p:dialog widgetVar="eliminarGarantia" header="ELIMINAR GARANTIA"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p13.delete}"  >
+
+            <h:form id="frmEliminarGarantia" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR LA SIGUIENTE GARANTIA:" />
+                <p:panelGrid columns="2" style="margin: auto">
+                    <p:outputLabel value="CORRELATIVO:" />
+                    <p:outputLabel value="#{garantiaController.selected.anio}/#{garantiaController.selected.correlativo}" />
+                    <p:outputLabel value="PROCESO:" />
+                    <p:outputLabel value="#{garantiaController.selected.proceso.numero}" />
+                    <p:outputLabel value="DESCRIPCION:" />
+                    <p:outputLabel value="#{garantiaController.selected.proceso.descripcion}" />
+                    <p:outputLabel value="CONTRATO:" />
+                    <p:outputLabel value="#{garantiaController.selected.contrato.numero}" />
+                    <p:outputLabel value="PROVEEDOR:" />
+                    <p:outputLabel value="#{garantiaController.selected.proveedor.nombre}" />
+                    <p:outputLabel value="TIPO:" />
+                    <p:outputLabel value="#{garantiaController.selected.tipo}" />
+                    <p:outputLabel value="N&deg; GARANTIA:" />
+                    <p:outputLabel value="#{garantiaController.selected.numGarantia}" />
+                    <p:outputLabel value="FECHA VENCIMIENTO:" />
+                    <p:outputLabel value="#{garantiaController.selected.fechaVencimientoLabel}" />
+                    <p:outputLabel value="MONTO:" />
+                    <p:outputLabel value="#{garantiaController.selected.monto}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{garantiaController.delete}" oncomplete="PF('eliminarGarantia').hide()"  update=":msg,:frmGarantias" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarGarantia').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+</html>
+

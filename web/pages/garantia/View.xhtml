@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- VER INFO GARANTIA-->
+        
+        <p:dialog widgetVar="verGarantia" header="VER INFORMACION GARANTIA"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+            <h:form id="frmVerGarantia">
+                <p:panelGrid columns="4" style="width:600px;">
+                    <p:outputLabel value="CLAVE:" />
+                    <p:outputLabel value="#{garantiaController.selected.anio}/#{garantiaController.selected.correlativo}" />
+                    <p:outputLabel value="FECHA RECEPCION:"  />
+                    <p:outputLabel value="#{garantiaController.selected.fechaInicioLabel}" />
+                    <p:outputLabel value="PROCESO:" />
+                    <p:outputLabel value="#{garantiaController.selected.proceso.numero}" />
+                    <p:outputLabel value="DESCRIPCION:" />
+                    <p:outputLabel value="#{garantiaController.selected.proceso.descripcion}" />
+                    <p:outputLabel value="CONTRATO:"  />
+                    <p:outputLabel value="#{garantiaController.selected.contrato.numero}" />
+                    <p:outputLabel value="PROVEEDOR:" />
+                    <p:outputLabel value="#{garantiaController.selected.proveedor.nombre}" />
+                    <p:outputLabel value="TIPO:" />
+                    <p:outputLabel value="#{garantiaController.selected.tipo.nombreTipo}" />
+                    <p:outputLabel value="N&deg; GARANTIA:"  />
+                    <p:outputLabel value="#{garantiaController.selected.numGarantia}" />
+                    <p:outputLabel value="AFIANZADORA:" />
+                    <p:outputLabel value="#{garantiaController.selected.afianzadora.nombre}" />
+                    <p:outputLabel value="PLAZO:" />
+                    <p:outputLabel value="#{garantiaController.selected.plazo}" />
+                    <p:outputLabel value="VENCIMIENTO:" />
+                    <p:outputLabel value="#{garantiaController.selected.fechaVencimientoLabel}" />
+                    <p:outputLabel value="MONTO:" />
+                    <p:outputLabel value="#{garantiaController.selected.monto}" />
+                    <p:outputLabel value="ESTADO:" />
+                    <p:outputLabel value="#{garantiaController.selected.estadoLabel}"  />
+                    <p:outputLabel value="NOTA:" />
+                    <p:outputLabel value="#{garantiaController.selected.nota}"  />
+                    <p:outputLabel value="REGISTRADO POR:"  />
+                    <p:outputLabel value="#{garantiaController.selected.registradoPor}" />
+                    <p:outputLabel value="FECHA REGISTRO:"  />
+                    <p:outputLabel value="#{garantiaController.selected.fechaIngresoLabel}" />
+                    <p:outputLabel value="MODIFICADO POR:"  />
+                    <p:outputLabel value="#{garantiaController.selected.modificadoPor}" />
+                    <p:outputLabel value="ULTIMA MODIFICACION"  />
+                    <p:outputLabel value="#{garantiaController.selected.fechaModificadoLabel}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+                    
+</html>
+

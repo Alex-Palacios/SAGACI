@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">PERMISOS Y PRIVILEGIOS</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+
+                 <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu>  
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            
+            <h:form id="frmPermisos">
+                
+                <p:contextMenu for="dtPermisos"> 
+                    <p:menuitem value="Cambiar Privilegios" oncomplete="PF('editarPermiso').show()" update=":frmEditarPermiso" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p15.update}"/>  
+                </p:contextMenu>
+
+                <p:outputLabel value="TIPO DE CUENTA:" />
+                <p:selectOneMenu value="#{seguridadController.grupo}" editable="false" style="margin-bottom: -5px;">
+                    <f:selectItems  value="#{seguridadController.tiposUsuariosSelectOne}"  />
+                            <p:ajax listener="#{seguridadController.recreatePermisosList}" update="dtPermisos"/>
+               </p:selectOneMenu>
+                <br/><br/>
+                <p:dataTable id="dtPermisos" var="permiso" value="#{seguridadController.permisosSAG}" 
+                             selection="#{seguridadController.selectedPermiso}" rowKey="#{permiso.idOpcMnuGrupo}" selectionMode="single"
+                             paginator="true" rows="20" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="NO HAY PERMISOS PARA ADMINISTRAR" >
+
+                    <p:columnGroup type="header">
+                        <p:row>
+                            <p:column rowspan="2" headerText="PERMISO" />
+                            <p:column colspan="3" headerText="PRIVILEGIOS" />
+                        </p:row>
+                        <p:row>
+                            <p:column headerText="REGISTRAR" />
+                            <p:column headerText="ACTUALIZAR" />
+                            <p:column headerText="ELIMINAR" />
+                        </p:row>
+                    </p:columnGroup>
+
+                    <p:column headerText="PERMISO">
+                        #{permiso.idOpcion.nombreOpcion}
+                    </p:column>
+                    
+                    <p:column headerText="REGISTRAR" style="#{permiso.styleClassAutIns}">
+                        #{permiso.lbAutIns}
+                    </p:column>
+                   
+                    <p:column headerText="ACTUALIZAR" style="#{permiso.styleClassAutUpd}">
+                        #{permiso.lbAutUpd}
+                    </p:column>
+                    
+                    <p:column headerText="ELIMINAR" style="#{permiso.styleClassAutDel}">
+                        #{permiso.lbAutDel}
+                    </p:column>
+                    
+                   
+                </p:dataTable>
+
+            </h:form>
+            
+            
+           
+            
+            
+            <p:dialog widgetVar="editarPermiso" header="EDITAR PRIVILEGIOS"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p15.update}" >
+
+            
+                <h:form id="frmEditarPermiso">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="PERMISO:"/>
+                        <p:outputLabel value="#{seguridadController.selectedPermiso.idOpcion.nombreOpcion}" />
+                        <p:outputLabel value="REGISTRAR:" for="registrar" />
+                        <p:selectOneMenu id="registrar" value="#{seguridadController.selectedPermiso.autIns}">
+                            <f:selectItem itemLabel="SI" itemValue="Y"   />
+                            <f:selectItem itemLabel="NO" itemValue="N"   />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="ACTUALIZAR:" for="actualizar" />
+                        <p:selectOneMenu id="actualizar" value="#{seguridadController.selectedPermiso.autUpd}">
+                            <f:selectItem itemLabel="SI" itemValue="Y"   />
+                            <f:selectItem itemLabel="NO" itemValue="N"   />
+                        </p:selectOneMenu>
+                        <p:outputLabel value="ELIMINAR:" for="eliminar" />
+                        <p:selectOneMenu id="eliminar" value="#{seguridadController.selectedPermiso.autDel}">
+                            <f:selectItem itemLabel="SI" itemValue="Y"   />
+                            <f:selectItem itemLabel="NO" itemValue="N"   />
+                        </p:selectOneMenu>
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{seguridadController.editarPermiso}"  type="submit" update=":frmEditarPermiso,:msg,:frmPermisos" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" type="button"  onclick="PF('editarPermiso').hide()" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+          
+            
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

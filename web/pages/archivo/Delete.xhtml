@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- ELIMINAR ARCHIVO-->
+        
+        <p:dialog widgetVar="eliminarArchivo" header="ELIMINAR ARCHIVO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p9.delete}" >
+
+            <h:form id="frmEliminarArchivo" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE ARCHIVO:" />
+                <p:panelGrid columns="2" style="margin: auto">
+                    <p:outputLabel value="CONTRATO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.numero}" />
+                    <p:outputLabel value="PROCESO:" />
+                    <p:outputLabel value="#{archivoController.selected.contrato.proceso.numero}" />
+                    <p:outputLabel value="CAJA:" />
+                    <p:outputLabel value="#{archivoController.selected.caja}" />
+                    <p:outputLabel value="AMPO:" />
+                    <p:outputLabel value="#{archivoController.selected.ampo}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{archivoController.delete}" oncomplete="PF('eliminarArchivo').hide()"  update=":msg,:frmArchivos" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarArchivo').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+</html>
+

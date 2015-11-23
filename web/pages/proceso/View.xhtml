@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+                    
+        <!-- VER INFO PROCESO-->
+        
+        <p:dialog widgetVar="verProceso" header="VER INFORMACION PROCESO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+            <h:form id="frmVerProceso">
+                <p:panelGrid columns="2" style="width: 600px;" >
+                    <p:outputLabel value="PROCESO NUMERO:" />
+                    <p:outputLabel value="#{procesoController.selected.numero}" />
+                    <p:outputLabel value="METODO ADQUISICION:" />
+                    <p:outputLabel value="#{procesoController.selected.metodo.nombre}"/>
+                    <p:outputLabel value="TECNICO RESPONSABLE:" />
+                    <p:outputLabel value="#{procesoController.selected.tecnico.nombreCompleto}" />
+                    <p:outputLabel value="NOMBRE DE LICITACION O CONCURSO:"  />
+                    <p:outputLabel value="#{procesoController.selected.descripcion}" />
+                    <p:outputLabel value="GRUPO SIAP:"  />
+                    <p:outputLabel value="#{procesoController.selected.siap}" />
+                    <p:outputLabel value="NOTA:"  />
+                    <p:outputLabel value="#{procesoController.selected.nota}"/>
+                    <p:outputLabel value="REGISTRADO POR:"  />
+                    <p:outputLabel value="#{procesoController.selected.registradoPor}" />
+                    <p:outputLabel value="FECHA REGISTRO:"  />
+                    <p:outputLabel value="#{procesoController.selected.fechaIngresoLabel}" />
+                    <p:outputLabel value="MODIFICADO POR:"  />
+                    <p:outputLabel value="#{procesoController.selected.registradoPor}" />
+                    <p:outputLabel value="ULTIMA MODIFICACION"  />
+                    <p:outputLabel value="#{procesoController.selected.fechaModificadoLabel}" />
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+                    
+</html>
+

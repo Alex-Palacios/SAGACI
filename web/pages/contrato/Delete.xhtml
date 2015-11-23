@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- ELIMINAR CONTRATO-->
+        
+        <p:dialog widgetVar="eliminarContrato" header="ELIMINAR CONTRATO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p7.delete}" >
+
+            <h:form id="frmEliminarContrato" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE CONTRATO:" />
+                <p:panelGrid columns="2" style="margin: auto">
+                    <p:outputLabel value="CONTRATO:" />
+                    <p:outputLabel value="#{contratoController.selected.numero}" />
+                    <p:outputLabel value="PROCESO:" />
+                    <p:outputLabel value="#{contratoController.selected.proceso.codProceso}" />
+                    <p:outputLabel value="CONTRATISTA:" />
+                    <p:outputLabel value="#{contratoController.selected.contratista.nombre}" />
+                    <p:outputLabel value="MONTO:" />
+                    <p:outputLabel value="#{contratoController.selected.monto}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{contratoController.delete}" oncomplete="PF('eliminarContrato').hide()"  update=":msg,:frmContratos" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarContrato').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+</html>
+

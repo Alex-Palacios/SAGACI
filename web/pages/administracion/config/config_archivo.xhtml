@@ -1,0 +1,195 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">ARCHIVO CONFIG</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+
+                <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu> 
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            CONFIGURACION DE VARIABLE PARA ARCHIVO
+            <h:form id="frmConfigDigit">
+                
+                <p:contextMenu for="dtEstatusDigit"> 
+                    <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarEstatusDigit').show()" update=":frmEditarEstatusDigit" styleClass="menu-context" disabled="#{!seguridadController.p8.update}" />  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarEstatusDigit').show()" update=":frmEliminarEstatusDigit" styleClass="menu-context" disabled="#{!seguridadController.p8.delete}"/>  
+                </p:contextMenu>
+
+                <p:dataTable id="dtEstatusDigit" var="estatusDigit" value="#{estatusDigitController.items}" 
+                             selection="#{estatusDigitController.selected}" rowKey="#{estatusDigit.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="ESTADOS DE DIGITALIZACION NO DEFINIDOS" style="width: 400px;float: left" >
+
+                    <f:facet name="header">ESTADOS DE DIGITALIZACION</f:facet>
+
+                    <p:column headerText="ESTADO DE DIGITALIZACION">
+                        #{estatusDigit.estado}
+                    </p:column>
+                    
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{estatusDigitController.prepareCreate}" oncomplete="PF('crearEstatusDigit').show()" update=":frmCrearEstatusDigit" disabled="#{!seguridadController.p8.insert}" />
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearEstatusDigit" header="NUEVO ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p8.insert}" >
+
+                <h:form id="frmCrearEstatusDigit">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO DIGITALIZACION:" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusDigitController.newItem.estado}" maxlength="50" required="true" requiredMessage="ESTADO DE DIGITALIZACION REQUERIDO" size="40" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{estatusDigitController.create}"  type="submit" update=":frmCrearEstatusDigit,:msg,:frmConfigDigit" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearEstatusDigit').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarEstatusDigit" header="ACTUALIZAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p8.update}" >
+
+                <h:form id="frmEditarEstatusDigit">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO DIGITALIZACION:" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusDigitController.selected.estado}" maxlength="50" required="true" requiredMessage="NOMBRE DE ESTADO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{estatusDigitController.update}"  update=":frmEditarEstatusDigit,:msg,:frmConfigDigit" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarEstatusDigit').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarEstatusDigit" header="ELIMINAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p8.delete}" >
+
+                <h:form id="frmEliminarEstatusDigit" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL ESTADO:" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO DIGITALIZACION:" />
+                        <p:outputLabel value="#{estatusDigitController.selected.estado}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{estatusDigitController.delete}" oncomplete="PF('eliminarEstatusDigit').hide()"  update=":msg,:frmConfigDigit" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarEstatusDigit').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- /////////////// ESTATUS FOLIO //////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+            <p:outputLabel value="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" style="float: left;"/>
+            
+            <h:form id="frmConfigFolio"> 
+                <p:contextMenu for="dtEstatusFolio"> 
+                    <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarEstatusFolio').show()" update=":frmEditarEstatusFolio" styleClass="menu-context" disabled="#{!seguridadController.p8.update}"/>  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarEstatusFolio').show()" update=":frmEliminarEstatusFolio" styleClass="menu-context" disabled="#{!seguridadController.p8.delete}" />  
+                </p:contextMenu>
+
+                <p:dataTable id="dtEstatusFolio" var="estatusFolio" value="#{estatusFolioController.items}" 
+                             selection="#{estatusFolioController.selected}" rowKey="#{estatusFolio.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="ESTADOS DE FOLIO NO DEFINIDOS" style="width: 400px;float: left" >
+
+                    <f:facet name="header">ESTADOS DE FOLIO</f:facet>
+
+                    <p:column headerText="ESTADO DE FOLIO">
+                        #{estatusFolio.estado}
+                    </p:column>
+                    
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{estatusFolioController.prepareCreate}" oncomplete="PF('crearEstatusFolio').show()" update=":frmCrearEstatusFolio" disabled="#{!seguridadController.p8.insert}" />
+                    </f:facet>
+                </p:dataTable>
+            </h:form> 
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearEstatusFolio" header="NUEVO ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p8.insert}" >
+
+                <h:form id="frmCrearEstatusFolio">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO FOLIO" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusFolioController.newItem.estado}" maxlength="50" required="true" requiredMessage="ESTADO DE DIGITALIZACION REQUERIDO" size="40" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{estatusFolioController.create}"  type="submit" update=":frmCrearEstatusFolio,:msg,:frmConfigFolio" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearEstatusFolio').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarEstatusFolio" header="ACTUALIZAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p8.update}" >
+
+                <h:form id="frmEditarEstatusFolio">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO FOLIO:" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusFolioController.selected.estado}" maxlength="50" required="true" requiredMessage="NOMBRE DE ESTADO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{estatusFolioController.update}"  update=":frmEditarEstatusFolio,:msg,:frmConfigFolio" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarEstatusFolio').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarEstatusFolio" header="ELIMINAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p8.delete}">
+
+                <h:form id="frmEliminarEstatusFolio" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL ESTADO:" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO FOLIO:" />
+                        <p:outputLabel value="#{estatusFolioController.selected.estado}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{estatusFolioController.delete}" oncomplete="PF('eliminarEstatusFolio').hide()"  update=":msg,:frmConfigFolio" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarEstatusFolio').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

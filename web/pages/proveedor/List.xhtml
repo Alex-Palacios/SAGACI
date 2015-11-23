@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">PROVEEDORES</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                    <p:menuitem value="REGISTRAR PROVEEDOR" icon="ui-icon-plus" actionListener="#{proveedorController.prepareCreate}" oncomplete="PF('crearProveedor').show()" update=":frmCrearProveedor" disabled="#{!seguridadController.p4.insert}" /> 
+                    
+                    
+                    <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                        <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                     </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmProveedores">
+                
+                    <br/><br/>
+                    <p:contextMenu for="dtProveedores"> 
+                        <p:menuitem value="Ver" oncomplete="PF('verProveedor').show()" update=":frmVerProveedor" icon="ico-ver" styleClass="menu-context" />  
+                        <p:menuitem value="Editar" oncomplete="PF('editarProveedor').show()" update=":frmEditarProveedor" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p4.update}"/>  
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarProveedor').show()" update=":frmEliminarProveedor" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p4.delete}"/>  
+                    </p:contextMenu>
+                    <h:commandLink style="float: left"> 
+                            <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                            <p:dataExporter type="xls" target="dtProveedores" fileName="PROVEEDORES" postProcessor="#{funciones.postProcessXLS_PROVEEDORES}" />  
+                     </h:commandLink>
+                    <p:dataTable id="dtProveedores" var="proveedor" value="#{proveedorController.items}" filteredValue="#{proveedorController.filtroProveedores}"
+                                 selection="#{proveedorController.selected}" rowKey="#{proveedor.id}" selectionMode="single"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" style="margin-bottom:0"
+                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO EXISTEN PROVEEDORES REGISTRADOS" >
+
+                        <p:column headerText="PROVEEDOR" filterBy="#{proveedor.nombre}" filterMatchMode="contains" filterStyle="width:80%;" style="width: 30%;">
+                            <f:facet name="header">PROVEEDOR</f:facet>
+                            <h:outputText value="#{proveedor.nombre}" />
+                        </p:column>
+                        <p:column headerText="NATURALEZA" filterBy="#{proveedor.naturaleza}" filterOptions="#{proveedorController.naturalezaProveedorItems}" filterMatchMode="exact" >
+                            <f:facet name="header">NATURALEZA</f:facet>
+                            <h:outputText value="#{proveedor.naturalezaLabel}" />
+                        </p:column>
+                        <p:column headerText="N.I.T" >
+                            <f:facet name="header">N.I.T</f:facet>
+                            <h:outputText value="#{proveedor.nit}" />
+                        </p:column>
+                        <p:column headerText="TELEFONO" >
+                            <f:facet name="header">TELEFONO</f:facet>
+                            <h:outputText value="#{proveedor.tel}" />
+                        </p:column>
+                        <p:column headerText="CORREO" >
+                            <f:facet name="header">CORREO</f:facet>
+                            <h:outputText value="#{proveedor.correo}" />
+                        </p:column>
+                        <p:column headerText="CONTACTO/REPRESENTANTE LEGAL" style="width: 20%;" >
+                            <f:facet name="header">CONTACTO/REPRESENTANTE LEGAL</f:facet>
+                            <h:outputText value="#{proveedor.contacto}" />
+                        </p:column>
+                        <p:column headerText="NOTA" >
+                            <f:facet name="header">NOTA</f:facet>
+                            <h:outputText value="#{proveedor.nota}" />
+                        </p:column>
+                    </p:dataTable>
+            </h:form>
+            
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+        </ui:define>
+</ui:composition>
+</html>
+

@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">IMPORTAR GARANTIAS</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="NUEVA GARANTIA" icon="ui-icon-plus" actionListener="#{garantiaController.prepareCreate}" disabled="#{!seguridadController.p13.insert}"  /> 
+                <p:menuitem value="IMPORTAR DESDE EXCEL" actionListener="#{garantiaController.prepareImportarExcel}" disabled="#{!seguridadController.p13.insert}" /> 
+                    
+                    <p:submenu label="REPORTES"   style="margin-top: 10px;"  >
+                        <p:menuitem value="TODAS LAS GARANTIAS" actionListener="#{garantiaController.prepareList}" /> 
+                        <p:menuitem value="GARANTIAS VIGENTES" actionListener="#{garantiaController.prepareReporteVigentes}"  /> 
+                        <p:menuitem value="GARANTIAS VENCIDAS" actionListener="#{garantiaController.prepareReporteVencidas}" />
+                        <p:menuitem value="GARANTIAS POR VENCER" actionListener="#{garantiaController.prepareReportePorVencer}"  />
+                    </p:submenu>
+                    
+                    <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                        <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                     </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+        <h:form id="frmGarantias" rendered="#{seguridadController.p13.insert}" >
+                <p:fileUpload id="fileUp" fileUploadListener="#{garantiaController.handleFileUpload}" mode="advanced" dragDropSupport="false"
+                              update=":msg,@this,tabla" sizeLimit="1000000" label="Importar" uploadLabel="Subir" cancelLabel="Cancelar" disabled="#{garantiaController.file != null}"  allowTypes="/(\.|\/)(xls|xlsx)$/"
+                              style="width: 600px; float: left;"/>
+
+                <p:commandButton value="Limpiar" actionListener="#{garantiaController.limpiarCache}" update="tabla,fileUp" style="float: right;" />
+                <p:commandButton value="Guardar" actionListener="#{garantiaController.importarDatos}" update="tabla,fileUp,:msg" style="float: right;" />
+                <p:commandButton value="Plantilla" ajax="false" onclick="PrimeFaces.monitorDownload(start, stop);" icon="ui-icon-arrowthick-1-s" style="float: right;">
+                    <p:fileDownload value="#{garantiaController.filePlantilla}" />
+                </p:commandButton>
+                <br/>
+                <p:scrollPanel style="width:100%;height:400px;" mode="native">
+                <p:dataTable id="tabla" value="#{garantiaController.importacion}" var="import"
+                             styleClass="datatable"
+                             emptyMessage="NO HA IMPORTADO ARCHIVO">
+                    
+                    <p:column headerText="ANIO">
+                         #{import.anioClave}
+                    </p:column>
+                    
+                    <p:column headerText="N&deg;">
+                         #{import.numClave}
+                     </p:column>
+                    
+                    <p:column headerText="FECHA RECEPCION">
+                         #{import.fechaRecepcionString}
+                     </p:column>
+                    
+                    <p:column headerText="METODO ADQUISICION">
+                         #{import.metodo}
+                    </p:column>
+                                          
+                    <p:column headerText="N&deg; LICITACION O CONCURSO">
+                         #{import.numProceso}
+                    </p:column>
+                    
+                    <p:column headerText="NOMBRE LICITACION O CONCURSO" >
+                         #{import.proceso}
+                    </p:column>
+                    
+                    <p:column headerText="SIAP">
+                         #{import.siap}
+                    </p:column>
+                    
+                    <p:column headerText="TECNICO">
+                         #{import.tecnico}
+                    </p:column>
+                    
+                    <p:column headerText="CONTRATO">
+                         #{import.contrato}
+                    </p:column>
+                    
+                    <p:column headerText="RESOLUCION MODIFICATIVA">
+                         #{import.modificativa}
+                    </p:column>
+                    
+                    <p:column headerText="FECHA CONTRATO">
+                         #{import.fechaContratoString}
+                    </p:column>
+                                        
+                    <p:column headerText="PROVEEDOR">
+                         #{import.proveedor}
+                    </p:column>
+                    
+                    <p:column headerText="PLAZO CONTRATO">
+                         #{import.plazoContrato}
+                    </p:column>
+                    
+                    <p:column headerText="MONTO CONTRATO">
+                         #{import.montoContrato}
+                    </p:column>
+                    
+                    <p:column headerText="TIPO GARANTIA">
+                         #{import.tipoGarantia}
+                     </p:column>
+                    
+                    <p:column headerText="MONTO GARANTIA">
+                         #{import.montoGarantia}
+                    </p:column>
+                    
+                    <p:column headerText="PLAZO GARANTIA">
+                         #{import.plazo}
+                    </p:column>
+                    
+                    <p:column headerText="AFIANZADORA">
+                         #{import.afianzadora}
+                    </p:column>
+                    
+                    <p:column headerText="FECHA VENCIMIENTO">
+                         #{import.fechaVencimientoString}
+                    </p:column>
+                    
+                    <p:column headerText="NUMERO GARANTIA">
+                         #{import.numGarantia}
+                    </p:column>
+                    
+                    <p:column headerText="FECHA DEVOLUCION">
+                         #{import.fechaDevolucionString}
+                    </p:column>
+                    
+                    <p:column headerText="PERSONA QUE RETIRA GARANTIA">
+                         #{import.personaRetira}
+                    </p:column>
+                    
+                    <p:column headerText="ESTADO">
+                         #{import.estado}
+                    </p:column>
+                    
+                 </p:dataTable>
+                 </p:scrollPanel>
+            </h:form>
+            
+            
+        </ui:define>
+</ui:composition>
+</html>
+

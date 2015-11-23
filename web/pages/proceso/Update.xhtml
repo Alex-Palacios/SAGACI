@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- EDITAR INFO PROCESO-->
+    <p:dialog widgetVar="editarProceso" header="ACTUALIZAR INFORMACION PROCESO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p3.update}" >
+
+        <h:form id="frmEditarProceso">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="METODO ADQUISICION:" for="metodoAdq" />
+                <p:selectOneMenu id="metodoAdq" value="#{procesoController.selected.metodo}" required="true" requiredMessage="METODO DE ADQUISICION REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{metodoAdqController.itemsSelectMenu}" var="m" itemDescription="#{m.nombre}"  />
+                </p:selectOneMenu>
+                <p:outputLabel value="PROCESO NUMERO:" for="numProceso" />
+                <p:inputText id="numProceso" value="#{procesoController.selected.numero}" maxlength="50" required="true" requiredMessage="NUMERO DE PROCESO REQUERIDO" size="50"  />
+                <p:outputLabel value="SIAP:" for="siap" />
+                <p:inputText id="siap" value="#{procesoController.selected.siap}" maxlength="50" required="false" requiredMessage="NUMERO DE SIAP REQUERIDO"  />
+                <p:outputLabel value="NOMBRE DE LICITACION O CONCURSO:" for="descripcion" />
+                <p:inputTextarea id="descripcion" value="#{procesoController.selected.descripcion}" cols="50" rows="5" required="true" requiredMessage="DESCRIPCION REQUERIDA"  />
+                <p:outputLabel value="TECNICO RESPONSABLE:" for="tecnico" />
+                <p:selectOneMenu id="tecnico" value="#{procesoController.selected.tecnico}" required="true" requiredMessage="TECNICO RESPONSABLE REQUERIDO"
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{tecnicoController.itemsAvailableSelectMany}"  />
+                </p:selectOneMenu>
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{procesoController.selected.nota}" cols="50" rows="2" />
+
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{procesoController.update}"  update=":frmEditarProceso,:msg,:frmProcesos" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarProceso').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+</html>
+

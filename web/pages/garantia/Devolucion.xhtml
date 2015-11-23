@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+          
+            <!-- DEVOLVER GARANTIA-->
+            <p:dialog widgetVar="devolverGarantia" header="DEVOLUCION DE GARANTIA"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p13.update}"  >
+
+                <h:form id="frmDevolverGarantia" >
+                    <p:outputLabel value="SEGURO QUE DESEA DEVOLVER LA SIGUIENTE GARANTIA:" />
+                    <p:panelGrid columns="2" style="margin: auto">
+                        <p:outputLabel value="CLAVE GARANTIA:" />
+                        <p:outputLabel value="#{garantiaController.selected.clave}" />
+                        <p:outputLabel value="PROCESO:" />
+                        <p:outputLabel value="#{garantiaController.selected.proceso.codProceso}" />
+                        <p:outputLabel value="CONTRATO:" />
+                        <p:outputLabel value="#{garantiaController.selected.contrato.numero}" />
+                        <p:outputLabel value="PROVEEDOR:" />
+                        <p:outputLabel value="#{garantiaController.selected.proveedor.nombre}" />
+                        <p:outputLabel value="MONTO"/>
+                        <p:outputLabel value="#{garantiaController.selected.monto}" />
+                        <p:outputLabel value="DEVUELTA A:" for="devueltaA"/>
+                        <p:inputText id="devueltaA" value="#{garantiaController.selected.retiradoPor}" maxlength="100" required="true" requiredMessage="ESPECIFIQUE A QUIEN SE DEVOLVIO LA GARANTIA" size="50" />
+                        <p:outputLabel value="FECHA DEVOLUCION" for="fechaDevolucion"/>
+                        <p:calendar id="fechaDevolucion" value="#{garantiaController.selected.fechaDevolucion}"  mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA DEVOLUCION REQUERIDA" />
+
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="DEVOLVER" actionListener="#{garantiaController.devolver}"  update=":msg,:frmGarantias" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('devolverGarantia').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ANULAR DEVOLUCION DE GARANTIA-->
+            <p:dialog widgetVar="NODevolverGarantia" header="ANULAR DEVOLUCION DE GARANTIA"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p13.update}"  >
+
+                <h:form id="frmNODevolverGarantia" >
+                    <p:outputLabel value="SEGURO QUE DESEA ANULAR LA DEVOLUCION DE LA SIGUIENTE GARANTIA:" />
+                    <p:panelGrid columns="2" style="margin: auto">
+                        <p:outputLabel value="CLAVE GARANTIA:" />
+                        <p:outputLabel value="#{garantiaController.selected.clave}" />
+                        <p:outputLabel value="PROCESO:" />
+                        <p:outputLabel value="#{garantiaController.selected.proceso.codProceso}" />
+                        <p:outputLabel value="CONTRATO:" />
+                        <p:outputLabel value="#{garantiaController.selected.contrato.numero}" />
+                        <p:outputLabel value="PROVEEDOR:" />
+                        <p:outputLabel value="#{garantiaController.selected.proveedor.nombre}" />
+                        <p:outputLabel value="MONTO"/>
+                        <p:outputLabel value="#{garantiaController.selected.monto}" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ANULAR DEVOLUCION" actionListener="#{garantiaController.NODevolver}"  update=":msg,:frmGarantias" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('NODevolverGarantia').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+
+                </h:form>
+            </p:dialog>
+
+            <!-- DATOS DEL FORMULARIO DE DOVOLUCION -->
+            <p:dialog widgetVar="datosFormDevolucion" header="FORMULARIO DE DEVOLUCION DE GARANTIA"  appendTo="@(body)" modal="true"  >
+                <h:form id="frmDatosDevolucion">
+                    <p:panelGrid columns="2">
+                        <p:outputLabel value="AÑO DE DEVOLUCION:"  />
+                        <p:selectOneMenu id="anioDev" value="#{garantiaController.selected.anioDev}" required="true" requiredMessage="ANIO REQUERIDO" 
+                                         editable="false" rendered="#{garantiaController.selected.gteFormDev == null}" >
+                            <p:ajax listener="#{garantiaController.nextNumFormDev}" update="correlativoDev" process="@this"/>
+                            <f:selectItems  value="#{funciones.ultimos5Anios}"   />
+                        </p:selectOneMenu>
+                        <p:commandButton value="RESET NUMERO DE FORMULARIO" actionListener="#{garantiaController.resetNumFormDev}" update=":frmDatosDevolucion" process="@this" rendered="#{garantiaController.selected.gteFormDev != null}"/>
+                        <p:outputLabel value="FORMULARIO N&deg;:"  />
+                        <p:outputLabel id="correlativoDev" value="#{garantiaController.selected.anioDev}/#{garantiaController.selected.formDev}" />
+                        <p:outputLabel value="GERENTE:"  />
+                        <p:inputText value="#{garantiaController.selected.gteFormDev}"  size="50" required="true" requiredMessage="INGRESE NOMBRE DEL GERENTE QUE FIRMARA FORMULARIO" rendered="#{garantiaController.selected.gteFormDev == null}" />
+                        <p:outputLabel value="#{garantiaController.selected.gteFormDev}" rendered="#{garantiaController.selected.gteFormDev != null}" />
+                    </p:panelGrid>
+                    <br/><br/>
+                    <p:commandButton value="FORMULARIO" actionListener="#{garantiaController.printFrmDevolucion}"  update=":msg,:frmDatosDevolucion,:frmDevolucion" icon="ui-icon-print" />
+                    <p:commandButton value="CANCELAR" onclick="PF('datosFormDevolucion').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+
+                </h:form>
+            </p:dialog>
+
+            <!-- FORMULARIO DE DEVOLUCION -->
+            <p:dialog widgetVar="formularioDevolucion" header="FORMULARIO DE DEVOLUCION DE GARANTIA"  appendTo="@(body)" width="60%" height="500"  >
+                <h:form id="frmDevolucion">
+
+                    <object type="application/pdf" data="#{funciones.pathServletFrmDevolucion}"  width="100%" height="500">
+
+                    </object>
+
+                </h:form>
+            </p:dialog>
+</html>
+

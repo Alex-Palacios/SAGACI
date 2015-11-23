@@ -1,0 +1,143 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+    <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+    <ui:define name="title">NUEVA GARANTIA</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                    <p:menuitem value="NUEVA GARANTIA" icon="ui-icon-plus" actionListener="#{garantiaController.prepareCreate}" disabled="#{!seguridadController.p13.insert}" /> 
+                    <p:menuitem value="IMPORTAR DESDE EXCEL" actionListener="#{garantiaController.prepareImportarExcel}" disabled="#{!seguridadController.p13.insert}" /> 
+                    
+                    <p:submenu label="REPORTES"   style="margin-top: 10px;"  >
+                        <p:menuitem value="TODAS LAS GARANTIAS" actionListener="#{garantiaController.prepareList}" /> 
+                        <p:menuitem value="GARANTIAS VIGENTES" actionListener="#{garantiaController.prepareReporteVigentes}"  /> 
+                        <p:menuitem value="GARANTIAS VENCIDAS" actionListener="#{garantiaController.prepareReporteVencidas}" /> 
+                        <p:menuitem value="GARANTIAS POR VENCER" actionListener="#{garantiaController.prepareReportePorVencer}"  />
+                    </p:submenu>
+                    
+                     <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                        <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                     </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+        
+        <p:scrollPanel id="scpPrincipal" mode="native" style="width:90%;height:90%;">
+           <h:form id="frmCrearGarantia" rendered="#{seguridadController.p13.insert}">
+                <p:fieldset id="fstProceso" legend="PROCESO" style="width:90%;" >
+                    <p:panelGrid id="pngProceso" columns="3" >
+                         <p:outputLabel value="PROCESO:" for="proceso" />
+                         <p:selectOneMenu id="proceso" value="#{garantiaController.newItem.proceso}" required="true" requiredMessage="PROCESO REQUERIDO"
+                                          filter="true" filterMatchMode="contains">
+                             <p:ajax update="descripcion,contrato,tecnico" process="@this"/>
+                             <f:selectItem itemValue="#{null}" itemLabel="--------" />
+                             <f:selectItems value="#{procesoController.itemsSelectMenu}" var="p" itemDescription="#{p.descripcion}"  />
+                         </p:selectOneMenu>
+                         <p:commandButton icon="ui-icon-plus" iconPos="center" actionListener="#{procesoController.prepareCreate}" oncomplete="PF('crearProceso').show()" update=":frmCrearProceso" process="@this"  />
+                         <p:outputLabel value="NOMBRE LICITACION o CONCURSO:" />
+                         <p:outputLabel id="descripcion" value="#{garantiaController.newItem.proceso.descripcion}" />
+                         <br/>
+                         <p:outputLabel value="TECNICO RESPONSABLE DEL PROCESO:" />
+                         <p:outputLabel id="tecnico" value="#{garantiaController.newItem.proceso.tecnico.nombreCompleto}" />
+                     
+                    </p:panelGrid>
+                </p:fieldset>
+
+                <br/><br/>
+                <p:fieldset id="fstContrato" legend="CONTRATO" style="width:90%;" >
+                    <p:panelGrid columns="3">
+                         <p:outputLabel value="CONTRATO:" for="contrato" />
+                         <p:selectOneMenu id="contrato" value="#{garantiaController.newItem.contrato}"  required="#{garantiaController.newItem.tipo.ligadoAContrato}"
+                                          filter="true" filterMatchMode="contains" >
+                             <p:ajax update="contratista,proveedor" process="@this" />
+                             <f:selectItems  value="#{garantiaController.contratosByProcesoList}"   />
+                         </p:selectOneMenu>
+                         <p:commandButton icon="ui-icon-plus" iconPos="center" actionListener="#{contratoController.prepareCreate}" oncomplete="PF('crearContrato').show()" update=":frmCrearContrato" process="@this"  />
+                         <p:outputLabel value="CONTRATISTA:" />
+                         <p:outputLabel id="contratista" value="#{garantiaController.newItem.contrato.contratista.nombre}" />
+                     
+                    </p:panelGrid>
+                </p:fieldset>
+            
+                <br/><br/>
+                <p:fieldset id="fstGarantia" legend="GARANTIA" style="width:90%;">
+                    <p:panelGrid columns="3" >
+                        <p:outputLabel value="A&Ntilde;O" for="anio" />
+                        <p:selectOneMenu id="anio" value="#{garantiaController.newItem.anio}" required="true" requiredMessage="ANIO REQUERIDO" 
+                                         editable="false" >
+                            <p:ajax listener="#{garantiaController.nextNumGarantia}" update="correlativo" process="@this"/>
+                            <f:selectItems  value="#{funciones.ultimos5Anios}"   />
+                        </p:selectOneMenu>
+                        <br />
+                        <p:outputLabel value="CORRELATIVO:" for="correlativo" />
+                        <p:inputText id="correlativo" value="#{garantiaController.newItem.correlativo}" required="true" requiredMessage="CORRELATIVO DE GARANTIA REQUERIDO" readonly="#{garantiaController.newItem.anio >= 2016}" />
+                        <br />
+                        <p:outputLabel value="TIPO:" for="tipo" />
+                        <p:selectOneMenu id="tipo" value="#{garantiaController.newItem.tipo}" required="true" requiredMessage="TIPO DE GARANTIA REQUERIDO" 
+                                         filter="true" filterMatchMode="contains" >
+                            <p:ajax update="contrato" process="@this" />
+                            <f:selectItems  value="#{tipoGarantiaController.itemsAvailableSelectOne}"   />
+                        </p:selectOneMenu>
+                        <br />
+                        <p:outputLabel value="N&deg; GARANTIA" for="numgarantia" />
+                        <p:inputText id="numgarantia" value="#{garantiaController.newItem.numGarantia}" maxlength="50" required="true" requiredMessage="NUMERO DE GARANTIA REQUERIDO" />
+                        <br />
+                        <p:outputLabel value="AFIANZADORA:" for="afianzadora" />
+                        <p:selectOneMenu id="afianzadora" value="#{garantiaController.newItem.afianzadora}" required="true" requiredMessage="AFIANZADORA REQUERIDO" 
+                                         filter="true" filterMatchMode="contains" >
+                            <f:selectItems  value="#{afianzadoraController.itemsAvailableSelectOne}"   />
+                        </p:selectOneMenu>
+                        <p:commandButton icon="ui-icon-plus" iconPos="center" actionListener="#{afianzadoraController.prepareCreate}" oncomplete="PF('crearAfianzadora').show()" update=":frmCrearAfianzadora" process="@this"  />
+                         <p:outputLabel value="PROVEEDOR:" for="proveedor" />
+                        <p:selectOneMenu id="proveedor" value="#{garantiaController.newItem.proveedor}" required="true" requiredMessage="PROVEEDOR REQUERIDO" 
+                                         filter="true" filterMatchMode="contains" >
+                            <f:selectItems  value="#{garantiaController.proveedorGarantiaList}"   />
+                        </p:selectOneMenu>
+                        <p:commandButton icon="ui-icon-plus" iconPos="center" actionListener="#{proveedorController.prepareCreate}" oncomplete="PF('crearProveedor').show()" update=":frmCrearProveedor" process="@this"  />
+                        <p:outputLabel value="PLAZO:" for="plazo" />
+                        <p:inputText id="plazo" value="#{garantiaController.newItem.plazo}" maxlength="50" required="true" requiredMessage="PLAZO REQUERIDO" />
+                        <br />
+                        <p:outputLabel value="FECHA RECEPCION:" for="fechaInicio" />
+                        <p:calendar id="fechaInicio" value="#{garantiaController.newItem.fechaInicio}"  mode="popup"  navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA DE INICIO REQUERIDO" locale="sv"/>
+                        <br />
+                        <p:outputLabel value="FECHA VENCIMIENTO:" for="fechaVen" />
+                        <p:calendar id="fechaVen" value="#{garantiaController.newItem.fechaVencimiento}" mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA VENCIMIENTO REQUERIDO" locale="sv"/>
+                        <br />
+                        <p:outputLabel value="MONTO:" for="monto" />
+                        <p:inputText id="monto" value="#{garantiaController.newItem.monto}" required="true" requiredMessage="MONTO DEL GARANTIA REQUERIDO"  />
+                        <br />
+                        <p:outputLabel value="NOTA:" for="nota" />
+                        <p:inputTextarea id="nota" value="#{garantiaController.newItem.nota}" cols="30" rows="2" />
+
+                    </p:panelGrid>
+                </p:fieldset>
+                
+                <p:commandButton value="GUARDAR" actionListener="#{garantiaController.create}" type="submit" update=":msg,:frmCrearGarantia" icon="ui-icon-disk"  />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <p:commandButton value="LIMPIAR" rendered="false" action="#{garantiaController.prepareList}" type="button"  update="frmCrearGarantia"  icon="ui-icon-close" />
+        
+            </h:form>
+        
+        </p:scrollPanel>
+                
+        
+        <ui:include src="proceso.xhtml"/>
+        <ui:include src="tecnico.xhtml"/>
+        <ui:include src="contrato.xhtml"/>
+        <ui:include src="afianzadora.xhtml"/>
+        <ui:include src="proveedor.xhtml"/>
+    </ui:define>
+</ui:composition>
+</html>
+

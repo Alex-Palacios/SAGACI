@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; cminedIcoharset=UTF-8" />
+        <link rel="shortcut icon" href="resources/iconos/minedIco.gif"  type="image/gif"  />
+        <title>LOGIN</title>
+        <h:outputStylesheet library="css" name="estilos.css"/>
+    </h:head>
+
+    <h:body>
+        <p:layout fullPage="true">
+
+
+            <!-- PIE DE PAGINA -->
+            <p:layoutUnit position="west" size="300"  >
+                <div align="center" style="background-color:  rgb(92, 156, 204); height: 100%; width: auto;">
+                    <p:graphicImage url="/faces/resources/images/logo5.png" width="250" height="150" style="margin-top: 60%"  />
+                </div>
+            </p:layoutUnit>
+
+            <c:choose>
+
+                <!-- SI NO ESTA LOGEADO -->
+                <c:when test="${seguridadController.login == false}" >
+                    <!-- CONTENIDO DE LA PAGINA -->
+                    <p:layoutUnit position="center" collapsible="true" style="text-align: center;">
+
+                        <br/><br/><br/><br/><br/><br/>
+                        <p:outputLabel value="Bienvenid@s al Sistema de Administracion de Garantias de la Unidad de Adquisiciones y Contrataciones Institucionales" style="font-size: 12px;" />
+                        <br/><p:outputLabel value="U A C I " />
+                        <br/><br/>
+                        <p:outputLabel value="POR FAVOR INGRESE SUS CREDENCIALES:"/>
+                        <p:panel  header="INICIO DE SESION" styleClass="panel-login">
+                            <h:form id="frmLogin">
+                                <h:panelGrid columns="2" style=" margin-left: auto;margin-right: auto">
+                                    <p:outputLabel value="Username" for="username" />
+                                    <p:inputText id="username" value="#{seguridadController.username}" required="true" requiredMessage="No ha ingresado un usuario" />
+                                    <p:outputLabel value="Password" for="password" />
+                                    <p:password id="password" value="#{seguridadController.password}" required="true" requiredMessage="No ha ingresado una contrase&ntilde;a"  />
+
+                                </h:panelGrid>
+                                &nbsp; &nbsp; &nbsp;
+                                <p:commandButton  value="ENTRAR" actionListener="#{seguridadController.login}" process="@form"  update=":frmLogin"  />
+                                <br/><br/>
+                                <h:panelGroup id="messagePanel" layout="block" style="text-align: center;">
+                                    <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                                </h:panelGroup>
+                            </h:form>
+
+                        </p:panel>
+                    </p:layoutUnit>
+                </c:when>
+
+                <!-- SI YA ESTA LOGEADO -->
+                <c:otherwise>
+                    <p:layoutUnit position="center" collapsible="true" style="text-align: center;">
+
+                        <h:form id="frmLogeado">
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <div style="min-height: 300px; text-align: center">
+                                <p:graphicImage url="/faces/resources/images/logeado.jpg" alt="YA ESTA LOGEADO" width="200" />
+                                <p style="font-size: 20px;" >
+                                    Usted ya Inicio Sesion ... Para usar el sistema vaya a home o Cierre Sesion
+                                </p>
+                                <br/><br/>
+                                <p:commandButton value="Ir a Home" action="#{seguridadController.irHome}"  />
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <p:commandButton value="Cerrar Sesion" actionListener="#{seguridadController.logout}"  />
+                            </div>
+                        </h:form>
+                    </p:layoutUnit>
+                </c:otherwise>
+
+            </c:choose>
+            <!-- PIE DE PAGINA -->
+            <p:layoutUnit position="east" size="300" >
+                <div style="background-color:  rgb(92, 156, 204); height: 100%; width: auto;">
+                    <p:graphicImage url="/faces/resources/images/escudoES.jpg" width="210" height="160" style="margin-top: 60%; margin-left: 25px;" />
+                </div>
+            </p:layoutUnit>
+
+            <!-- PIE DE PAGINA -->
+            <p:layoutUnit position="south" size="30" >
+                <div align="center">
+                    <p:outputLabel value="MINED &copy; Copyright 2015" style="text-align: center; font-size: 10px;" />
+                </div>
+            </p:layoutUnit>
+
+        </p:layout>
+
+       
+    </h:body>
+
+
+</html>
+

@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">USUARIOS SISTEMA</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+
+                <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu>  
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            USUARIOS DEL #{bundle.nombre_aplicacion}
+            <h:form id="frmUsuarios">
+                
+                <p:contextMenu for="dtUsuarios"> 
+                    <p:menuitem value="Editar" actionListener="#{seguridadController.prepararEditar}" oncomplete="PF('editarUsuario').show()" update=":frmEditarUsuario" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p14.update}"  />  
+                    <p:menuitem value="Eliminar" oncomplete="PF('eliminarUsuario').show()" update=":frmEliminarUsuario" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p14.delete}"/>  
+                </p:contextMenu>
+
+                
+                <p:dataTable id="dtUsuarios" var="user" value="#{seguridadController.usuariosSAG}" 
+                             selection="#{seguridadController.selectedUser}" rowKey="#{user.idUsrAplicacion}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="NO HAY USUARIOS REGISTRADOS" >
+
+                    <f:facet name="header">LISTA DE USUARIOS</f:facet>
+
+                    <p:column headerText="NOMBRE">
+                        <h:outputText value="#{user.userId.nombres} #{user.userId.apellidos}" />
+                    </p:column>
+                    <p:column headerText="TELEFONO">
+                        <h:outputText value="#{user.userId.telefono}"/>
+                    </p:column>
+                    <p:column headerText="EMAIL">
+                        <h:outputText value="#{user.userId.correoElectronico}" />
+                    </p:column>
+                    <p:column headerText="ACTIVO" >
+                        <h:outputText value="#{user.userId.lbActivo}" style="#{user.userId.styleClassEstado}" />
+                    </p:column>
+                    <p:column headerText="FECHA EXPIRACION">
+                        <h:outputText value="#{user.userId.fechaExpiracionLabel}" />
+                    </p:column>
+                    <p:column headerText="USERNAME">
+                        <h:outputText value="#{user.login}"/>
+                    </p:column>
+                    <p:column headerText="TIPO USUARIO">
+                        <h:outputText value="#{user.idGrupo.descripcion}" />
+                    </p:column>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="NUEVO USUARIO" icon="ui-icon-plus" actionListener="#{seguridadController.prepareCrearUsuario}" oncomplete="PF('crearUsuario').show()" update=":frmCrearUsuario" disabled="#{!seguridadController.p14.insert}"/>
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearUsuario" header="NUEVO USUARIO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p14.insert}" >
+
+                <h:form id="frmCrearUsuario">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="NOMBRES:" for="nombres" />
+                        <p:inputText id="nombres" value="#{seguridadController.newItemUser.userId.nombres}" maxlength="50" required="true" requiredMessage="NOMBRE DE USUARIO REQUERIDO" size="50"  />
+                        <p:outputLabel value="APELLIDOS:" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{seguridadController.newItemUser.userId.apellidos}" maxlength="50" required="true" requiredMessage="APELLIDOS DE USUARIO REQUERIDO" size="50"  />
+                        <p:outputLabel value="TELEFONO:" for="tel" />
+                        <p:inputText id="tel" value="#{seguridadController.newItemUser.userId.telefono}" maxlength="9"  size="50"  />
+                        <p:outputLabel value="EMAIL:" for="correo" />
+                        <p:inputText id="correo" value="#{seguridadController.newItemUser.userId.correoElectronico}" maxlength="100"  size="50"  />
+                        <p:outputLabel value="TIPO DE USUARIO:" for="tipo" />
+                        <p:selectOneMenu id="tipo" value="#{seguridadController.newItemUser.idGrupo}" required="true" requiredMessage="TIPO DE USUARIO REQUERIDO"
+                                         filter="true" filterMatchMode="contains" >
+                            <f:selectItems  value="#{seguridadController.tiposUsuariosSelectOne}"    />
+                            
+                        </p:selectOneMenu>
+                        <p:selectBooleanCheckbox itemLabel="FECHA EXPIRACION" value="#{seguridadController.establecerFechaExp}" >
+                            <p:ajax update="fExp" process="@this" />
+                        </p:selectBooleanCheckbox>
+                        <p:calendar id="fExp" value="#{seguridadController.newItemUser.userId.fechaExpiracion}"  mode="popup"  navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" disabled="#{!seguridadController.establecerFechaExp}" locale="sv" />
+                        <p:outputLabel value="USERNAME:" for="username" />
+                        <p:inputText id="username" value="#{seguridadController.newItemUser.login}" maxlength="25" required="true" requiredMessage="USERNAME REQUERIDO" size="50"  />
+                    </p:panelGrid>
+                        
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{seguridadController.crearUsuario}"  type="submit" update=":frmCrearUsuario,:msg,:frmUsuarios" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" type="button"  onclick="PF('crearUsuario').hide()" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            
+            
+            <p:dialog widgetVar="editarUsuario" header="EDITAR INFORMACION USUARIO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p14.update}" >
+
+            
+                <h:form id="frmEditarUsuario">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="NOMBRES:" for="nombres" />
+                        <p:inputText id="nombres" value="#{seguridadController.selectedUser.userId.nombres}" maxlength="50" required="true" requiredMessage="NOMBRE DE USUARIO REQUERIDO" size="50"  />
+                        <p:outputLabel value="APELLIDOS:" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{seguridadController.selectedUser.userId.apellidos}" maxlength="50" required="true" requiredMessage="APELLIDOS DE USUARIO REQUERIDO" size="50"  />
+                        <p:outputLabel value="TELEFONO:" for="tel" />
+                        <p:inputText id="tel" value="#{seguridadController.selectedUser.userId.telefono}" maxlength="9"  size="50"  />
+                        <p:outputLabel value="EMAIL:" for="correo" />
+                        <p:inputText id="correo" value="#{seguridadController.selectedUser.userId.correoElectronico}" maxlength="100"  size="50"  />
+                        <p:outputLabel value="TIPO DE USUARIO:" />
+                        <p:outputLabel value="#{seguridadController.selectedUser.idGrupo.descripcion}" />
+                        <p:selectBooleanCheckbox itemLabel="CAMBIAR TIPO USUARIO" value="#{seguridadController.cambiarTipoUser}" >
+                            <p:ajax update="tipo" process="@this" />
+                        </p:selectBooleanCheckbox>
+                        <p:selectOneMenu id="tipo" value="#{seguridadController.nuevoTipo}" required="true" requiredMessage="TIPO DE USUARIO REQUERIDO"
+                                         filter="true" filterMatchMode="contains" disabled="#{!seguridadController.cambiarTipoUser}" >
+                            <f:selectItems  value="#{seguridadController.tiposUsuariosSelectOne}"    />
+                        </p:selectOneMenu>
+                        <p:selectBooleanCheckbox itemLabel="FECHA EXPIRACION" value="#{seguridadController.establecerFechaExp}" >
+                            <p:ajax update="fExp" process="@this" />
+                        </p:selectBooleanCheckbox>
+                        <p:calendar id="fExp" value="#{seguridadController.selectedUser.userId.fechaExpiracion}"  mode="popup"  navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" disabled="#{!seguridadController.establecerFechaExp}"  locale="sv" />
+                        <p:outputLabel value="USERNAME:" for="username" />
+                        <p:outputLabel id="username" value="#{seguridadController.selectedUser.login}"  />
+                        <br/>
+                        <p:selectBooleanCheckbox itemLabel="USUARIO ACTIVO" value="#{seguridadController.userActivo}" />
+                    </p:panelGrid>
+                        
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{seguridadController.editarUsuario}"  type="submit" update=":frmEditarUsuario,:msg,:frmUsuarios" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" type="button"  onclick="PF('editarUsuario').hide()" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR Usuario-->
+            <p:dialog widgetVar="eliminarUsuario" header="ELIMINAR USUARIO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p14.delete}">
+
+            <h:form id="frmEliminarUsuario" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE USUARIO:" />
+                <p:panelGrid columns="2" style="margin: auto;width: 500px;">
+                    <p:outputLabel value="NOMBRE:" />
+                    <p:outputLabel value="#{seguridadController.selectedUser.userId}" />
+                    <p:outputLabel value="USERNAME:" />
+                    <p:outputLabel value="#{seguridadController.selectedUser.login}" />
+                    <p:outputLabel value="TIPO DE USUARIO:" />
+                    <p:outputLabel value="#{seguridadController.selectedUser.idGrupo.descripcion}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{seguridadController.eliminarUsuario}" oncomplete="PF('eliminarUsuario').hide()"  update=":msg,:frmUsuarios" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarUsuario').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+            
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

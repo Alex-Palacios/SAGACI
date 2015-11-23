@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">CONTRATO CONFIG</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+
+                 <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu> 
+
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            CONFIGURACION DE VARIABLE PARA CONTRATO
+            <h:form id="frmConfig">
+                <p:contextMenu for="dtEstatus"> 
+                    <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarEstatus').show()" update=":frmEditarEstatus" styleClass="menu-context" disabled="#{!seguridadController.p5.update}"  />  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarEstatus').show()" update=":frmEliminarEstatus" styleClass="menu-context" disabled="#{!seguridadController.p5.delete}" />  
+                </p:contextMenu>
+
+                <p:dataTable id="dtEstatus" var="estatus" value="#{estatusContratoController.items}" 
+                             selection="#{estatusContratoController.selected}" rowKey="#{estatus.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="ESTADOS DE CONTRATO NO DEFINIDOS" >
+
+                    <f:facet name="header">ESTADOS DE CONTRATOS</f:facet>
+
+                    <p:column headerText="ESTADO DE CONTRATO">
+                        #{estatus.estado}
+                    </p:column>
+                    
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{estatusContratoController.prepareCreate}" oncomplete="PF('crearEstatus').show()" update=":frmCrearEstatus" disabled="#{!seguridadController.p5.insert}" />
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearEstatus" header="NUEVO ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p5.insert}" >
+
+                <h:form id="frmCrearEstatus">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO:" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusContratoController.newItem.estado}" maxlength="50" required="true" requiredMessage="NOMBRE DE ESTADO REQUERIDO" size="50" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{estatusContratoController.create}"  type="submit" update=":frmCrearEstatus,:msg,:frmConfig" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearEstatus').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarEstatus" header="ACTUALIZAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p5.update}">
+
+                <h:form id="frmEditarEstatus">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO:" for="nombre" />
+                        <p:inputText id="nombre" value="#{estatusContratoController.selected.estado}" maxlength="50" required="true" requiredMessage="NOMBRE DE ESTADO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{estatusContratoController.update}"  update=":frmEditarEstatus,:msg,:frmConfig" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarEstatus').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarEstatus" header="ELIMINAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p5.delete}">
+
+                <h:form id="frmEliminarEstatus" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL ESTADO:" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="ESTADO:" />
+                        <p:outputLabel value="#{estatusContratoController.selected.estado}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{estatusContratoController.delete}" oncomplete="PF('eliminarEstatus').hide()"  update=":msg,:frmConfig" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarEstatus').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

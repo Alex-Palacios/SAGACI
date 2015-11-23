@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+         <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        
+        <ui:define name="title">FUENTES DE FINANCIAMIENTO</ui:define>
+        
+         <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="ARCHIVOS" action="#{archivoController.prepareList}" />
+                <p:menuitem value="CONTRATOS POR ARCHIVAR" action="#{archivoController.prepareListArchivar}" />
+                <p:menuitem value="VER PAGOS" action="#{pagoController.prepareList}" /> 
+                <p:menuitem value="FUENTES DE FINANCIAMIENTO" action="#{fuenteFinancController.prepareList}" /> 
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+             <h:form id="frmFuentes">
+                                
+                    <p:contextMenu for="dtFuentes"> 
+                        <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarFuente').show()" update=":frmEditarFuente" styleClass="menu-context" disabled="#{!seguridadController.p9.update}" />  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarFuente').show()" update=":frmEliminarFuente" styleClass="menu-context" disabled="#{!seguridadController.p9.delete}" />  
+                </p:contextMenu>
+
+                <p:dataTable id="dtFuentes" var="fuente" value="#{fuenteFinancController.items}" 
+                             selection="#{fuenteFinancController.selected}" rowKey="#{fuente.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="ESTADOS DE CONTRATO NO DEFINIDOS" >
+
+                    <f:facet name="header">FUENTES DE FINANCIAMIENTO</f:facet>
+
+                    <p:column headerText="CODIGO">
+                        #{fuente.codigo}
+                    </p:column>
+                    <p:column headerText="NOMBRE FUENTE">
+                        #{fuente.nombre}
+                    </p:column>
+                    <p:column headerText="NOTA">
+                        #{fuente.nota}
+                    </p:column>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{fuenteFinancController.prepareCreate}" oncomplete="PF('crearFuente').show()" update=":frmCrearFuente" disabled="#{!seguridadController.p9.insert}" />
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearFuente" header="NUEVA FUENTE"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmCrearFuente">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CODIGO:" for="codigo" />
+                        <p:inputText id="codigo" value="#{fuenteFinancController.newItem.codigo}" maxlength="50" required="true" requiredMessage="CODIGO FUENTE REQUERIDO"  />
+                        <p:outputLabel value="NOMBRE FUENTE:" for="nombre" />
+                        <p:inputText id="nombre" value="#{fuenteFinancController.newItem.nombre}" maxlength="100" required="true" requiredMessage="NOMBRE FUENTE REQUERIDO" size="50" />
+                        <p:outputLabel value="NOTA:" for="nota" />
+                        <p:inputText id="nota" value="#{fuenteFinancController.newItem.nota}" maxlength="100"  size="50" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{fuenteFinancController.create}"  type="submit" update=":frmCrearFuente,:msg,:frmFuentes" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearFuente').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarFuente" header="ACTUALIZAR FUENTE"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmEditarFuente">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CODIGO:" for="codigo" />
+                        <p:inputText id="codigo" value="#{fuenteFinancController.selected.codigo}" maxlength="50" required="true" requiredMessage="CODIGO FUENTE REQUERIDO"  />
+                        <p:outputLabel value="NOMBRE FUENTE:" for="nombre" />
+                        <p:inputText id="nombre" value="#{fuenteFinancController.selected.nombre}" maxlength="100" required="true" requiredMessage="NOMBRE FUENTE REQUERIDO" size="50" />
+                        <p:outputLabel value="NOTA:" for="nota" />
+                        <p:inputText id="nota" value="#{fuenteFinancController.selected.nota}" maxlength="100"  size="50" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{fuenteFinancController.update}"  update=":frmEditarFuente,:msg,:frmFuentes" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarFuente').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarFuente" header="ELIMINAR FUENTE"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+                <h:form id="frmEliminarFuente" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL ESTADO:" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="FUENTE:" />
+                        <p:outputLabel value="#{fuenteFinancController.selected.nombre}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{fuenteFinancController.delete}" oncomplete="PF('eliminarFuente').hide()"  update=":msg,:frmFuentes" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarFuente').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

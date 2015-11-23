@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+         <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">CONTRATOS POR ARCHIVAR</ui:define>
+        
+       <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="ARCHIVOS" action="#{archivoController.prepareList}" />
+                <p:menuitem value="CONTRATOS POR ARCHIVAR" action="#{archivoController.prepareListArchivar}" />
+                <p:menuitem value="VER PAGOS" action="#{pagoController.prepareList}" /> 
+                <p:menuitem value="FUENTES DE FINANCIAMIENTO" action="#{fuenteFinancController.prepareList}" /> 
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+                
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+             <h:form id="frmContratosArchivar">
+                                
+                    
+                 <p:commandButton value="Archivar Contratos Seleccionados" actionListener="#{archivoController.prepareArchivarContratos}" update=":msg,dtContratos,:frmArchivarContrato" disabled="#{!seguridadController.p9.insert}"/>
+                 <br/>
+                 
+                 <p:dataTable id="dtContratos" var="contrato" value="#{archivoController.itemsContratos}" filteredValue="#{archivoController.filtroContratos}"
+                                 selection="#{archivoController.archivarList}" rowKey="#{contrato.id}" selectionMode="multiple"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" liveScroll="true" style="margin-bottom:0"
+                                 paginator="true" rows="25" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO HAY CONTRATOS PARA ARCHIVAR" >
+
+                        <p:column headerText="N&deg; CONTRATO" filterBy="#{contrato.numero}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">N&deg; CONTRATO</f:facet>
+                            <h:outputText value="#{contrato.numero}" />
+                        </p:column>
+                        <p:column headerText="FECHA DOC" >
+                            <f:facet name="header">FECHA DOC</f:facet>
+                            <h:outputLabel value="#{contrato.fechaLabel}"/>
+                        </p:column>
+                     <p:column headerText="PROCESO" filterBy="#{contrato.proceso.codProceso}" filterMatchMode="contains"  filterStyle="width:80%;"  >
+                            <f:facet name="header">PROCESO</f:facet>
+                            <h:outputText value="#{contrato.proceso.codProceso}" />
+                        </p:column>
+                        <p:column headerText="SIAP" filterBy="#{contrato.proceso.siap}"  filterStyle="width:80%;"  >
+                            <f:facet name="header">SIAP</f:facet>
+                            <h:outputText value="#{contrato.proceso.siap}" />
+                        </p:column>
+                     <p:column headerText="CONTRATISTA" filterBy="#{contrato.contratista.nombre}" filterMatchMode="contains" filterStyle="width:80%;" style="width: 20%;" >
+                            <f:facet name="header">CONTRATISTA</f:facet>
+                            <h:outputText value="#{contrato.contratista.nombre}" />
+                        </p:column>
+                        <p:column headerText="FECHA INICIO" >
+                            <f:facet name="header">FECHA INICIO</f:facet>
+                            <h:outputText value="#{contrato.fechaInicioLabel}" />
+                        </p:column>
+                        <p:column headerText="FECHA FIN" >
+                            <f:facet name="header">FECHA FIN</f:facet>
+                            <h:outputText value="#{contrato.fechaFinLabel}" />
+                        </p:column>
+                        <p:column headerText="PLAZO" >
+                            <f:facet name="header">PLAZO</f:facet>
+                            <h:outputText value="#{contrato.plazo}" />
+                        </p:column>
+                        <p:column headerText="MONTO" >
+                            <f:facet name="header">MONTO</f:facet>
+                            <h:outputText value="#{contrato.monto}" />
+                        </p:column>
+                        <p:column headerText="MODIFICATIVA" style="width: 7%;"  >
+                            <f:facet name="header">MODIFICATIVA</f:facet>
+                            <h:outputText value="#{contrato.modificativa}" />
+                        </p:column>
+                        <p:column headerText="NOTA" >
+                            <f:facet name="header">NOTA</f:facet>
+                            <h:outputText value="#{contrato.nota}" />
+                        </p:column>
+                    </p:dataTable>
+            </h:form>
+            
+            
+            
+             <!-- EDITAR CONTRATO -->
+            <p:dialog widgetVar="archivarContrato" header="ACTUALIZAR ESTADO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p9.insert}" >
+
+                <h:form id="frmArchivarContrato">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CONTRATOS A ARCHIVAR:" for="contratos" />
+                        <p:outputLabel id="contratos" value="#{archivoController.numContratosArchivar}" />
+                        <p:outputLabel value="CAJA:" for="caja" />
+                        <p:inputText id="caja" value="#{archivoController.newItem.caja}" />
+                        <p:outputLabel value="AMPO:" for="ampo" />
+                        <p:inputTextarea id="ampo" value="#{archivoController.newItem.ampo}" cols="30" rows="5" />
+                        <p:outputLabel value="FOLIO:" for="estadoFolio" />
+                        <p:selectOneMenu id="estadoFolio" value="#{archivoController.newItem.estatusFolio}" 
+                                        filter="true" filterMatchMode="contains" >
+                            <f:selectItems  value="#{estatusFolioController.itemsAvailableSelectOne}"   />
+                       </p:selectOneMenu>
+                        <p:outputLabel value="NUMERO DE PAGINAS:"  for="numPag"/>
+                        <p:inputText id="numPag" value="#{archivoController.newItem.numpag}" />
+                        <p:outputLabel value="FECHA DE ENTREGA:" for="fechaEntrega" />
+                        <p:calendar id="fechaEntrega" value="#{archivoController.newItem.fechaEntrega}"  mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" locale="sv" />
+                        <p:outputLabel value="DIGITALIZACION:" for="estadoDigit" />
+                        <p:selectOneMenu id="estadoDigit" value="#{archivoController.newItem.estatusDigit}" 
+                                        filter="true" filterMatchMode="contains" >
+                            <f:selectItems  value="#{estatusDigitController.itemsAvailableSelectOne}"   />
+                       </p:selectOneMenu>
+                        <p:outputLabel value="NOTA:" for="nota" />
+                        <p:inputText id="nota" value="#{archivoController.newItem.nota}" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ARCHIVAR" actionListener="#{archivoController.archivar}"  update=":frmArchivarContrato,:msg,:frmContratosArchivar" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('archivarContrato').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

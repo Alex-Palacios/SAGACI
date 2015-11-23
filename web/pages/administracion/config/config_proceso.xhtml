@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    
+    <ui:composition template="/resources/templates/template.xhtml">
+        
+        
+        <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+        <ui:define name="title">PROCESO CONFIG</ui:define>
+        
+        <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                
+                <p:menuitem value="PROCESO"  url="#{bundle.url_config_proceso}" />
+                <p:menuitem value="CONTRATO" url="#{bundle.url_config_contrato}"  />
+                <p:menuitem value="GARANTIA" url="#{bundle.url_config_garantia}"  />
+                <p:menuitem value="ARCHIVO"  url="#{bundle.url_config_archivo}"  />
+                <p:menuitem value="PAGO"     url="#{bundle.url_config_pago}"  />
+                <p:menuitem value="UNIDADES TECNICAS"     url="#{bundle.url_config_unidad}"  />
+                
+                 <p:separator/>
+                <p:submenu label="ADMINISTRACION" icon="ui-icon-wrench"  style="margin-top: 10px;"  >  
+                    <p:menuitem value="USUARIOS" url="#{bundle.url_usuarios}" />  
+                    <p:menuitem value="PERMISOS" url="#{bundle.url_permisos}"/> 
+                </p:submenu> 
+                
+                
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+           </p:tieredMenu>
+        </ui:define>
+        
+        <ui:define name="contenido">
+            CONFIGURACION DE VARIABLE PARA LA ADMINISTRACION DE PROCESOS:
+            <h:form id="frmConfig">
+                <p:contextMenu for="dtMetodos"> 
+                    <p:menuitem value="Editar" icon="ui-icon-pencil" oncomplete="PF('editarMetodoAdq').show()" update=":frmEditarMetodoAdq" styleClass="menu-context" disabled="#{!seguridadController.p2.update}" />  
+                    <p:menuitem value="Eliminar" icon="ui-icon-trash" oncomplete="PF('eliminarMetodoAdq').show()" update=":frmEliminarMetodoAdq" styleClass="menu-context" disabled="#{!seguridadController.p2.delete}"/>  
+                </p:contextMenu>
+
+                <p:dataTable id="dtMetodos" var="metodo" value="#{metodoAdqController.items}" 
+                             selection="#{metodoAdqController.selected}" rowKey="#{metodo.id}" selectionMode="single"
+                             paginator="true" rows="10" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             styleClass="datatable" emptyMessage="LISTA DE METODOS DE ADQUISICION VACIA" >
+
+                    <f:facet name="header">METODOS DE ADQUISICION</f:facet>
+
+                    <p:column headerText="CODIGO" >
+                        #{metodo.codigo}
+                    </p:column>
+                    <p:column headerText="METODO">
+                        #{metodo.nombre}
+                    </p:column>
+                    
+                    <f:facet name="footer">
+                        <p:commandButton value="AGREGAR" icon="ui-icon-plus" actionListener="#{metodoAdqController.prepareCreate}" oncomplete="PF('crearMetodoAdq').show()" update=":frmCrearMetodoAdq" disabled="#{!seguridadController.p2.insert}" />
+                    </f:facet>
+                </p:dataTable>
+
+            </h:form>
+            
+            
+            <!-- AGREGAR METODO -->
+    
+            <p:dialog widgetVar="crearMetodoAdq" header="NUEVO METODO"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p2.insert}" >
+
+                <h:form id="frmCrearMetodoAdq">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CODIGO REFERENCIA:" for="codigo" />
+                        <p:inputText id="codigo" value="#{metodoAdqController.newItem.codigo}" maxlength="50" required="true" requiredMessage="CODIGO DE REFERENCIA REQUERIDO"  />
+                        <p:outputLabel value="METODO ADQUISICION:" for="nombre" />
+                        <p:inputText id="nombre" value="#{metodoAdqController.newItem.nombre}" maxlength="100" required="true" requiredMessage="NOMBRE DEL METODO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="GUARDAR" actionListener="#{metodoAdqController.create}"  type="submit" update=":frmCrearMetodoAdq,:msg,:frmConfig" icon="ui-icon-disk" />
+                    <p:commandButton value="CANCELAR" onclick="PF('crearMetodoAdq').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            <!-- ACTUALIZAR METODO -->
+            <p:dialog widgetVar="editarMetodoAdq" header="ACTUALIZAR METODO DE ADQUISICION"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p2.update}" >
+
+                <h:form id="frmEditarMetodoAdq">
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CODIGO REFERENCIA:" for="codigo" />
+                        <p:inputText id="codigo" value="#{metodoAdqController.selected.codigo}" maxlength="50" required="true" requiredMessage="CODIGO DE REFERENCIA REQUERIDO"  />
+                        <p:outputLabel value="METODO ADQUISICION:" for="nombre" />
+                        <p:inputText id="nombre" value="#{metodoAdqController.selected.nombre}" maxlength="100" required="true" requiredMessage="NOMBRE DEL METODO REQUERIDO" />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ACTUALIZAR" actionListener="#{metodoAdqController.update}"  update=":frmEditarMetodoAdq,:msg,:frmConfig" type="submit" icon="ico-update" />
+                    <p:commandButton value="CANCELAR" onclick="PF('editarMetodoAdq').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+            
+            
+            
+            <!-- ELIMINAR METODO-->
+            <p:dialog widgetVar="eliminarMetodoAdq" header="ELIMINAR METODO DE ADQUISICION"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p2.delete}" >
+
+                <h:form id="frmEliminarMetodoAdq" >
+                    <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL METODO DE ADQUISICION:" />
+                    <p:panelGrid columns="2" >
+                        <p:outputLabel value="CODIGO REFERENCIA:" />
+                        <p:outputLabel value="#{metodoAdqController.selected.codigo}"  />
+                        <p:outputLabel value="METODO ADQUISICION:" />
+                        <p:outputLabel value="#{metodoAdqController.selected.nombre}"  />
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="ELIMINAR" actionListener="#{metodoAdqController.delete}" oncomplete="PF('eliminarMetodoAdq').hide()"  update=":msg,:frmConfig" type="submit" icon="ico-eliminar" />
+                    <p:commandButton value="CANCELAR" onclick="PF('eliminarMetodoAdq').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+                </h:form>
+            </p:dialog>
+        </ui:define>
+        
+    </ui:composition>
+</html>
+

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+   
+    
+    <!-- CREAR PROVEEDOR-->
+    
+    <p:dialog widgetVar="crearProveedor" header="NUEVO PROVEEDOR"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p4.insert}" >
+
+        <h:form id="frmCrearProveedor">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="NOMBRE PROVEEDOR:" for="nombre" />
+                <p:inputText id="nombre" value="#{proveedorController.newItem.nombre}" maxlength="255" required="true" requiredMessage="NOMBRE DE PROVEEDOR REQUERIDO" size="50"  /> 
+                <p:outputLabel value="NATURALEZA:" for="naturaleza" />
+                <p:selectOneMenu id="naturaleza" value="#{proveedorController.newItem.naturaleza}" 
+                                 required="true" requiredMessage="NATURALEZA DE PROVEEDOR REQUERIDO"  >
+                    <f:selectItems value="#{proveedorController.naturalezaProveedorItems}" />
+                </p:selectOneMenu>
+                <p:outputLabel value="NIT:" for="nit" />
+                <p:inputMask id="nit" value="#{proveedorController.newItem.nit}" maxlength="17" mask="9999-999999-999-9" />
+                <p:outputLabel value="TELEFONO:" for="tel" />
+                <p:inputText id="tel" value="#{proveedorController.newItem.tel}" maxlength="9" />
+                <p:outputLabel value="CORREO:" for="correo" />
+                <p:inputText id="correo" value="#{proveedorController.newItem.correo}" maxlength="100" size="50" validatorMessage="Correo invalido"  >
+                    <!-- <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" /> -->
+                </p:inputText>
+                <p:outputLabel value="CONTACTO/REPRESENTANTE LEGAL:" for="contacto" />
+                <p:inputText id="contacto" value="#{proveedorController.newItem.contacto}" maxlength="100" size="50"  />
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{proveedorController.newItem.nota}" cols="50" rows="2"/>
+
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="GUARDAR" actionListener="#{proveedorController.create}"  type="submit" update=":frmCrearProveedor,:msg,:frmProveedores" icon="ui-icon-disk" />
+            <p:commandButton value="CANCELAR" onclick="PF('crearProveedor').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+
+</html>
+

@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- EDITAR INFO GARANTIA-->
+    <p:dialog widgetVar="editarGarantia" header="ACTUALIZAR INFORMACION GARANTIA"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p13.update}" >
+
+        <h:form id="frmEditarGarantia">
+            <p:panelGrid columns="4" >
+                <p:outputLabel value="A&Ntilde;O" for="anio" />
+                <p:selectOneMenu id="anio" value="#{garantiaController.selected.anio}" required="true" requiredMessage="ANIO REQUERIDO" 
+                                 editable="true">
+                    <f:selectItems  value="#{funciones.ultimos5Anios}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="N&deg; GARANTIA" for="correlativo" />
+                <p:inputText id="correlativo" value="#{garantiaController.selected.correlativo}" required="true" requiredMessage="CORRELATIVO DE GARANTIA REQUERIDO" readonly="#{garantiaController.selected.anio >= 2016}"  />
+                        
+                <p:outputLabel value="PROCESO:" for="proceso" />
+                <p:selectOneMenu id="proceso" value="#{garantiaController.selected.proceso}" required="true" requiredMessage="PROCESO REQUERIDO"
+                                 filter="true" >
+                    <f:selectItems value="#{procesoController.itemsSelectMenu}" var="p" itemDescription="#{p.descripcion}"  />
+                </p:selectOneMenu>
+                <p:outputLabel value="CONTRATO:" for="contrato" />
+                <p:selectOneMenu id="contrato" value="#{garantiaController.selected.contrato}" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{contratoController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="PROVEEDOR:" for="proveedor" />
+                <p:selectOneMenu id="proveedor" value="#{garantiaController.selected.proveedor}" required="true" requiredMessage="PROVEEDOR REQUERIDO" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{proveedorController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="TIPO:" for="tipo" />
+                <p:selectOneMenu id="tipo" value="#{garantiaController.selected.tipo}" required="true" requiredMessage="TIPO DE GARANTIA REQUERIDO" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{tipoGarantiaController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="N&deg; GARANTIA" for="numgarantia" />
+                <p:inputText id="numgarantia" value="#{garantiaController.selected.numGarantia}" maxlength="50" required="true" requiredMessage="NUMERO DE GARANTIA REQUERIDO" />
+                <p:outputLabel value="AFIANZADORA:" for="afianzadora" />
+                <p:selectOneMenu id="afianzadora" value="#{garantiaController.selected.afianzadora}" required="true" requiredMessage="AFIANZADORA REQUERIDO" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{afianzadoraController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                <p:outputLabel value="PLAZO:" for="plazo" />
+                <p:inputText id="plazo" value="#{garantiaController.selected.plazo}" maxlength="50" required="true" requiredMessage="PLAZO REQUERIDO" />
+                <p:outputLabel value="FECHA RECEPCION:" for="fechaInicio" />
+                <p:calendar id="fechaInicio" value="#{garantiaController.selected.fechaInicio}"  mode="popup"  navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA DE INICIO REQUERIDO" />
+                <p:outputLabel value="FECHA VENCIMIENTO:" for="fechaVen" />
+                <p:calendar id="fechaVen" value="#{garantiaController.selected.fechaVencimiento}" mode="popup" navigator="true" showOn="button" readonlyInput="true" effect="slideDown" pattern="dd/MM/yyyy" required="true" requiredMessage="FECHA VENCIMIENTO REQUERIDO" />
+                <p:outputLabel value="MONTO:" for="monto" />
+                <p:inputText id="monto" value="#{garantiaController.selected.monto}" required="true" requiredMessage="MONTO DEL GARANTIA REQUERIDO"  />
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{garantiaController.selected.nota}" cols="30" rows="2" />
+            
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{garantiaController.update}"  update=":frmEditarGarantia,:msg,:frmGarantias" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarGarantia').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+</html>
+

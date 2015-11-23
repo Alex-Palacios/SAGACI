@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+        
+    <ui:define name="title">AFIANZADORAS</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                <p:menuitem value="AGREGAR AFIANZADORA" icon="ui-icon-plus" actionListener="#{afianzadoraController.prepareCreate}" oncomplete="PF('crearAfianzadora').show()" update=":frmCrearAfianzadora" disabled="#{!seguridadController.p11.insert}" /> 
+                    
+                <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                   <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmAfianzadoras">
+                
+                    <p:contextMenu for="dtAfianzadoras"> 
+                        <p:menuitem value="Ver" oncomplete="PF('verAfianzadora').show()" update=":frmVerAfianzadora" icon="ico-ver" styleClass="menu-context" />  
+                        <p:menuitem value="Editar" oncomplete="PF('editarAfianzadora').show()" update=":frmEditarAfianzadora" icon="ui-icon-pencil" styleClass="menu-context" disabled="#{!seguridadController.p11.update}"  />  
+                        <p:menuitem value="Eliminar" oncomplete="PF('eliminarAfianzadora').show()" update=":frmEliminarAfianzadora" icon="ui-icon-trash" styleClass="menu-context" disabled="#{!seguridadController.p11.delete}" />  
+                    </p:contextMenu>
+                    <h:commandLink style="float: left"> 
+                            <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                            <p:dataExporter type="xls" target="dtAfianzadoras" fileName="AFIANZADORAS" postProcessor="#{funciones.postProcessXLS_AFIANZADORAS}" />  
+                     </h:commandLink>
+                    <p:dataTable id="dtAfianzadoras" var="afianzadora" value="#{afianzadoraController.items}" filteredValue="#{afianzadoraController.filtroAfianzadoras}"
+                                 selection="#{afianzadoraController.selected}" rowKey="#{afianzadora.id}" selectionMode="single"
+                                 scrollable="true" scrollRows="20" scrollHeight="400" style="margin-bottom:0"
+                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="LISTA DE AFIANZADORAS VACIA" >
+
+                        <p:column headerText="AFIANZADORA" filterStyle="width:80%;" style="width: 50%;">
+                            <f:facet name="header">AFIANZADORA</f:facet>
+                            <h:outputText value="#{afianzadora.nombre}" />
+                        </p:column>
+                        
+                        <p:column headerText="COMENTARIO" >
+                            <f:facet name="header">COMENTARIO</f:facet>
+                            <h:outputText value="#{afianzadora.nota}"/>
+                        </p:column>
+                        
+                    </p:dataTable>
+            </h:form>
+            
+            <ui:include src="Insert.xhtml"/>
+            <ui:include src="View.xhtml"/>
+            <ui:include src="Update.xhtml"/>
+            <ui:include src="Delete.xhtml"/>
+        </ui:define>
+</ui:composition>
+</html>
+

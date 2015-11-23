@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+   
+    
+    <!-- CREAR AFIANZADORA-->
+    
+    <p:dialog widgetVar="crearAfianzadora" header="NUEVA AFIANZADORA"  appendTo="@(body)"  modal="true" resizable="false" rendered="#{seguridadController.p11.insert}"  >
+
+        <h:form id="frmCrearAfianzadora">
+            <p:panelGrid columns="2" >
+                <p:outputLabel value="AFIANZADORA:" for="nombre" />
+                <p:inputText id="nombre" value="#{afianzadoraController.newItem.nombre}" maxlength="100" required="true" requiredMessage="NOMBRE DE AFIANZADORA REQUERIDO" size="50"  />
+                <p:outputLabel value="COMENTARIO:" for="nota" />
+                <p:inputTextarea id="nota" value="#{afianzadoraController.newItem.nota}" cols="50" rows="2" />
+
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="GUARDAR" actionListener="#{afianzadoraController.create}"  type="submit" update=":frmCrearAfianzadora,:msg,:frmAfianzadoras" icon="ui-icon-disk" />
+            <p:commandButton value="CANCELAR" onclick="PF('crearAfianzadora').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+
+</html>
+

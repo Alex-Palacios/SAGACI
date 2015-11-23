@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+        <!-- ELIMINAR PROVEEDOR-->
+        <p:dialog widgetVar="eliminarProveedor" header="ELIMINAR PROVEEDOR"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p4.delete}">
+
+            <h:form id="frmEliminarProveedor" >
+                <p:outputLabel value="SEGURO QUE DESEA ELIMINAR EL SIGUIENTE PROVEEDOR:" />
+                <p:panelGrid columns="2" style="margin: auto">
+                    <p:outputLabel value="PROVEEDOR:" />
+                    <p:outputLabel value="#{proveedorController.selected.nombre}" />
+                    <p:outputLabel value="NATURALEZA:" />
+                    <p:outputLabel value="#{proveedorController.selected.naturalezaLabel}" />
+                </p:panelGrid>
+                <br/>
+                <p:commandButton value="ELIMINAR" actionListener="#{proveedorController.delete}" oncomplete="PF('eliminarProveedor').hide()"  update=":msg,:frmProveedores" type="submit" icon="ico-eliminar" />
+                <p:commandButton value="CANCELAR" onclick="PF('eliminarProveedor').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+            </h:form>
+        </p:dialog>
+</html>
+

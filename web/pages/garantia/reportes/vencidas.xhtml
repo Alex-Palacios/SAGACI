@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    
+<ui:composition template="/resources/templates/template.xhtml">
+    
+    <ui:define name="icono-title"><link rel="shortcut icon" href="../../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:define>
+    <ui:define name="title">GARANTIAS VENCIDAS</ui:define>
+        
+    <ui:define name="menuOpciones">
+            <p:tieredMenu autoDisplay="false" >
+                
+                    <p:menuitem value="NUEVA GARANTIA" icon="ui-icon-plus" actionListener="#{garantiaController.prepareCreate}"  /> 
+                    <p:menuitem value="IMPORTAR DESDE EXCEL" actionListener="#{garantiaController.prepareImportarExcel}" /> 
+                    
+                    <p:submenu label="REPORTES"   style="margin-top: 10px;"  >
+                        <p:menuitem value="TODAS LAS GARANTIAS" actionListener="#{garantiaController.prepareList}" /> 
+                        <p:menuitem value="GARANTIAS VIGENTES" actionListener="#{garantiaController.prepareReporteVigentes}"  /> 
+                        <p:menuitem value="GARANTIAS VENCIDAS" actionListener="#{garantiaController.prepareReporteVencidas}" /> 
+                        <p:menuitem value="GARANTIAS POR VENCER" actionListener="#{garantiaController.prepareReportePorVencer}"  />
+                    </p:submenu>
+                    
+                    <p:submenu label="AYUDA" icon="ui-icon-help"  style="margin-top: 10px;"  >  
+                        <p:menuitem value="MANUAL" icon="ui-icon-help" url="#{bundle.url_manual}"/> 
+                     </p:submenu>
+                    
+            </p:tieredMenu>
+    </ui:define>
+        
+    <ui:define name="contenido">
+            <h:form id="frmGarantiasVencidas">
+                <p:scrollPanel style="width:100%;height:450px;" mode="native">
+                <h:commandLink style="float: left"> 
+                       <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
+                       <p:dataExporter type="xls" target="dtGarantiasVencidas" fileName="GARANTIAS_VENCIDAS" postProcessor="#{funciones.postProcessXLS_VENCIDAS}"/>  
+                </h:commandLink> 
+                    <p:commandButton action="#{garantiaController.generarRptVencidas}" update=":frmRptVencidas" type="submit" icon="ico-pdf" iconPos="center" style="width: 30px;height: auto;float: left" />
+             
+                <p:dataTable id="dtGarantiasVencidas" var="garantia" value="#{garantiaController.vencidas}" filteredValue="#{garantiaController.filtroVencidas}"
+                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 styleClass="datatable" emptyMessage="NO EXISTEN GARANTIAS VENCIDAS" style="float:left;" >
+
+                        <p:column headerText="CLAVE"  >
+                            <f:facet name="header">CLAVE</f:facet>
+                            <h:outputText value="#{garantia.anio}/#{garantia.correlativo}" />
+                        </p:column>
+                        <p:column headerText="RECIBIDO" >
+                            <f:facet name="header">RECIBIDO</f:facet>
+                            <h:outputText value="#{garantia.fechaInicioLabel}" />
+                        </p:column>
+                        <p:column headerText="PROCESO" filterBy="#{garantia.proceso.numero}" filterMatchMode="contains"  >
+                            <f:facet name="header">PROCESO</f:facet>
+                            <h:outputText value="#{garantia.proceso.numero}" />
+                        </p:column>
+                    <p:column headerText="DESCRIPCION" style="width: 20%" >
+                            <f:facet name="header">DESCRIPCION</f:facet>
+                            <h:outputText value="#{garantia.proceso.descripcion}" />
+                        </p:column>
+                    <p:column headerText="CONTRATO" filterBy="#{garantia.contrato.numero}" filterMatchMode="contains" >
+                            <f:facet name="header">CONTRATO</f:facet>
+                            <h:outputText value="#{garantia.contrato.numero}"/>
+                        </p:column>
+                    <p:column headerText="TECNICO" filterBy="#{garantia.proceso.tecnico.nombre}" filterMatchMode="contains" filterStyle="width:80%"  >
+                            <f:facet name="header">TECNICO</f:facet>
+                            <h:outputText value="#{garantia.proceso.tecnico.nombre}" />
+                        </p:column>
+                        <p:column headerText="PROVEEDOR" filterBy="#{garantia.proveedor.nombre}" filterMatchMode="contains" >
+                            <f:facet name="header">PROVEEDOR</f:facet>
+                            <h:outputText value="#{garantia.proveedor.nombre}" />
+                        </p:column>
+                        <p:column headerText="AFIANZADORA" filterBy="#{garantia.afianzadora.nombre}" filterStyle="width:80%"  >
+                            <f:facet name="header">AFIANZADORA</f:facet>
+                            <h:outputText value="#{garantia.afianzadora.nombre}"/>
+                        </p:column>
+                        <p:column headerText="TIPO" filterBy="#{garantia.tipo.nombreTipo}" filterOptions="#{tipoGarantiaController.itemsAvailableSelectOne}" filterMatchMode="exact" style="width: 7%"  >
+                            <f:facet name="header">TIPO</f:facet>
+                            <h:outputText value="#{garantia.tipo.nombreTipo}" />
+                        </p:column>
+                        <p:column headerText="N&deg; GARANTIA" >
+                            <f:facet name="header">GARANTIA</f:facet>
+                            <h:outputText value="#{garantia.numGarantia}" />
+                        </p:column>
+                        <p:column headerText="PLAZO" >
+                            <f:facet name="header">PLAZO</f:facet>
+                            <h:outputText value="#{garantia.plazo}" />
+                        </p:column>
+                        <p:column headerText="FECHA VENCTO" >
+                            <f:facet name="header">FECHA VENCTO</f:facet>
+                            <h:outputText value="#{garantia.fechaVencimientoLabel}" style="color:red;" />
+                        </p:column>
+                        <p:column headerText="MONTO" >
+                            <f:facet name="header">MONTO</f:facet>
+                            <h:outputText value="#{garantia.monto}" />
+                        </p:column>
+                        <p:column headerText="ESTADO" >
+                            <h:outputText value="VENCIDA" style="color: red;" />
+                        </p:column>
+                    </p:dataTable>
+                    </p:scrollPanel>
+            </h:form>
+        
+        
+        
+        
+        <!-- REPORTE EN PDF -->
+        <p:dialog widgetVar="rptVencidas" header="LISTA DE GARANTIAS VENCIDAS"  appendTo="@(body)"   width="60%" height="500"  >
+            <h:form id="frmRptVencidas">
+                <h:panelGroup rendered="#{garantiaController.vencidas != null}">
+                    <object type="application/pdf" data="#{funciones.pathServletRptVencidas}"  width="100%" height="500">
+
+                    </object>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+            
+        </ui:define>
+</ui:composition>
+</html>
+

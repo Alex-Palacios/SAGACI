@@ -1,0 +1,123 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- EDITAR INFO ARCHIVO-->
+    <p:dialog widgetVar="editarArchivo" header="ACTUALIZAR INFORMACION ARCHIVO"  appendTo="@(body)"  modal="true" resizable="false"  rendered="#{seguridadController.p9.update}">
+
+        <h:form id="frmEditarArchivo">
+            <p:panelGrid columns="4" >
+                <p:outputLabel value="CONTRATO ARCHIVADO:" for="contrato" />
+                <p:outputLabel id="contrato" value="#{archivoController.selected.contrato.numero}" />
+                <p:outputLabel value="CAJA:" for="caja" />
+                <p:inputText id="caja" value="#{archivoController.selected.caja}" />
+                <p:outputLabel value="AMPO:" for="ampo" />
+                <p:inputTextarea id="ampo" value="#{archivoController.selected.ampo}" cols="30" rows="5" />
+                <p:outputLabel value="FOLIO:" for="estadoFolio" />
+                <p:selectOneMenu id="estadoFolio" value="#{archivoController.selected.estatusFolio}" 
+                                filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{estatusFolioController.itemsAvailableSelectOne}"   />
+               </p:selectOneMenu>
+                <p:outputLabel value="NUMERO DE PAGINAS:"  for="numPag"/>
+                <p:inputText id="numPag" value="#{archivoController.selected.numpag}" />
+                <p:outputLabel value="FECHA DE ENTREGA:" for="fechaEntrega" />
+                <p:calendar id="fechaEntrega" value="#{archivoController.selected.fechaEntrega}"  mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy"  />
+                <p:outputLabel value="DIGITALIZACION:" for="estadoDigit" />
+                <p:selectOneMenu id="estadoDigit" value="#{archivoController.selected.estatusDigit}" 
+                                filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{estatusDigitController.itemsAvailableSelectOne}"   />
+               </p:selectOneMenu>
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputText id="nota" value="#{archivoController.selected.nota}" />
+                    
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{archivoController.update}"  update=":frmEditarArchivo,:msg,:frmArchivos" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarArchivo').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+    
+    
+    
+    <!-- EDITAR INFO CONTRATO-->
+    <p:dialog widgetVar="editarContrato" header="ACTUALIZAR INFORMACION CONTRATO"  appendTo="@(body)"  modal="true" resizable="false"  >
+
+        <h:form id="frmEditarContrato">
+            <p:panelGrid columns="4" >
+                <p:outputLabel value="N&deg; CONTRATO:" for="numContrato" />
+                <p:outputLabel id="numContrato" value="#{archivoController.selectedContrato.numero}" />
+                
+                <p:outputLabel value="UNIDAD TECNICA:" for="unidad" />
+                <p:selectOneMenu id="unidad" value="#{archivoController.selectedContrato.unidad}" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{unidadTecnicaController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="FECHA DOCUMENTO:" for="fechaContrato" />
+                <p:calendar id="fechaContrato" value="#{archivoController.selectedContrato.fecha}"  mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" required="false" requiredMessage="FECHA DE CONTRATO REQUERIDO" />
+                
+                <p:outputLabel value="ADMINISTRADOR:" for="admin" />
+                <p:inputText id="admin" value="#{archivoController.selectedContrato.admin}" maxlength="100"  />
+                
+                <p:outputLabel value="PROCESO:" for="proceso" />
+                <p:outputLabel id="proceso" value="#{archivoController.selectedContrato.proceso.numero}" />
+                
+                <p:outputLabel value="DESCRIPCION:" for="descripcion" />
+                <p:outputLabel id="descripcion" value="#{archivoController.selectedContrato.proceso.descripcion}" />
+                
+                <p:outputLabel value="N&deg; ADJUDICACION:" for="nunAdj" />
+                <p:inputText id="nunAdj" value="#{archivoController.selectedContrato.adjudicacion}" maxlength="50"  />
+                
+                <p:outputLabel value="CONTRATISTA:" for="contratista" />
+                <p:outputLabel id="contratista" value="#{archivoController.selectedContrato.contratista}" />
+                
+                <p:outputLabel value="FUENTE FINANCIAMIENTO:" for="fuente" />
+                <p:selectOneMenu id="fuente" value="#{archivoController.selectedContrato.fuente}" 
+                                 filter="true" filterMatchMode="contains" >
+                    <f:selectItems  value="#{fuenteFinancController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="PLAZO:" for="plazo" />
+                <p:inputText id="plazo" value="#{archivoController.selectedContrato.plazo}" maxlength="50" required="true" requiredMessage="PLAZO REQUERIDO" />
+                
+                <p:outputLabel value="FORMA PAGO:" for="formaPago" />
+                <p:inputText id="formaPago" value="#{archivoController.selectedContrato.formaPago}" maxlength="50"  />
+                
+                <p:outputLabel value="FECHA INICIO:" for="fechaInicio" />
+                <p:calendar id="fechaInicio" value="#{archivoController.selectedContrato.fechaInicio}"  mode="popup"  navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy"  />
+                
+                <p:outputLabel value="COMPROMISO PRESUPUESTARIO:" for="compromiso" />
+                <p:inputText id="compromiso" value="#{archivoController.selectedContrato.compromisoPresup}" maxlength="50"  />
+                
+                <p:outputLabel value="FECHA FIN:" for="fechaFin" />
+                <p:calendar id="fechaFin" value="#{archivoController.selectedContrato.fechaFin}" mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" />
+                
+                <p:outputLabel value="FECHA ORDEN:" for="fechaOrden" />
+                <p:calendar id="fechaOrden" value="#{archivoController.selectedContrato.fechaOrden}" mode="popup" navigator="true" showOn="button" readonlyInput="false" effect="slideDown" pattern="dd/MM/yyyy" />
+                
+                <p:outputLabel value="MONTO:" for="monto" />
+                <p:outputLabel id="monto" value="#{archivoController.selectedContrato.monto}" />
+                
+                <p:outputLabel value="ESTADO:" for="estado" />
+                <p:selectOneMenu id="estado" value="#{archivoController.selectedContrato.estatusContrato}" >
+                    <f:selectItems  value="#{estatusContratoController.itemsAvailableSelectOne}"   />
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="NOTA:" for="nota" />
+                <p:inputTextarea id="nota" value="#{archivoController.selectedContrato.nota}" cols="30" rows="2" />
+                
+                <p:outputLabel value="RESOLUCION MODIFICATIVA:" for="rm" />
+                <p:outputLabel id="rm" value="#{archivoController.selectedContrato.modificativa}"  />
+                
+            </p:panelGrid>
+            <br/>
+            <p:commandButton value="ACTUALIZAR" actionListener="#{archivoController.updateContrato}"  update=":frmEditarContrato,:msg,:frmArchivos" type="submit" icon="ico-update" />
+            <p:commandButton value="CANCELAR" onclick="PF('editarContrato').hide()" type="button" icon="ui-icon-close" style="float: right;" />
+        </h:form>
+    </p:dialog>
+</html>
+

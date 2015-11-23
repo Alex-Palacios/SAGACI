@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <ui:insert name="icono-title"><link rel="shortcut icon" href="../../resources/iconos/minedIco.gif"  type="image/gif"  /></ui:insert>
+        <title> <ui:insert name="title">UACI-MINED</ui:insert> </title>
+        <h:outputStylesheet library="css" name="estilos.css"/>
+        <h:outputScript library="scripts" name="javaScript.js"/>
+        
+    </h:head>
+
+    
+    
+    <h:body> 
+        <!--CONTENEDOR PRINCIPAL -->
+        <p:layout fullPage="true" >
+
+                <!-- ENCABEZADO -->
+                <p:layoutUnit position="north" size="100" header="#{bundle.nombre_aplicacion}" style="text-align: center;">
+                    <div style="background-color: rgb(70,163,202); height:60px; width: auto;">
+                        <!-- <p:graphicImage url="/faces/resources/images/mined.png" style="height: 60px; width: 300px; margin-top: 0px;" /> -->
+                        <p:outputLabel value="M I N E D" style="color: white;font-size: 50px; font-family: monospace;" />
+                    </div>
+                    
+                </p:layoutUnit>
+
+                
+                <c:choose>
+                                  
+                    <!-- SI YA ESTA LOGEADO -->
+                    <c:when test="${seguridadController.login == true and seguridadController.usuario != null}" >
+                        <!-- MENU PRINCIPAL -->
+                        <p:layoutUnit id="menuSecundario"  position="west" size="170" header="OPCIONES"  >
+
+                            <h:form id="frmMenuSecundario" >
+                                    <ui:insert name="menuOpciones"  />
+                            </h:form>
+                            <p:outputLabel value="Usuario:" /><br/>
+                            <p:outputLabel value="#{seguridadController.usuario.userId}" />
+                            <p:graphicImage url="/faces/resources/images/logo5.png" width="160" height="100"  style="margin-top: 10px; margin-left: 0px;" />
+                        </p:layoutUnit>
+                        <a href="../../pages/garantia/import.xhtml"></a>
+
+                        <!-- CONTENIDO DE LA PAGINA -->
+                        <p:layoutUnit position="center"   >
+                            <!-- MENSAJES -->
+                            <p:growl id="msg" life="5000"/>
+
+                            <ui:insert name="contenido"  />
+
+                        </p:layoutUnit>
+                        
+                        
+                        <!-- PIE DE PAGINA -->
+                            <p:layoutUnit position="south" size="25" visible="#{seguridadController.login}" >
+                                <h:form>
+                                    <p:dock position="bottom">
+                                        <p:menuitem value="Home" icon="/resources/images/home.png" url="#{bundle.url_home}" style="color: black;"/>
+                                        <p:menuitem value="Tecnicos" icon="/resources/images/tecnicos.png" actionListener="#{tecnicoController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Procesos" icon="/resources/images/procesos.png" actionListener="#{procesoController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Proveedores" icon="/resources/images/proveedores.png" actionListener="#{proveedorController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Contratos" icon="/resources/images/contratos.png" actionListener="#{contratoController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Afianzadoras" icon="/resources/images/afianzadoras.png" actionListener="#{afianzadoraController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Garantias" icon="/resources/images/garantias.png" actionListener="#{garantiaController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Archivo" icon="/resources/images/archivos.png" actionListener="#{archivoController.prepareList}" style="color: black;"/>
+                                        <p:menuitem value="Configuraciones" icon="/resources/images/config.png" url="#{bundle.url_configuracion}" style="color: black;"/>
+                                        <p:menuitem value="Salir" icon="/resources/images/logout.png" actionListener="#{seguridadController.logout}" style="color: black;"/>
+                                        <!-- more menuitems -->
+                                    </p:dock>
+                                </h:form>
+                                <div align="rigth">
+                                    <p:outputLabel value="MINED &copy; Copyright 2013" style="text-align: center; font-size: 10px;" />
+                                </div>
+                            </p:layoutUnit>
+                    </c:when>
+
+
+                    <!-- SI NO ESTA LOGEADO -->
+                    <c:otherwise>
+                        <p:layoutUnit position="center">
+                               <h:form>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div style="min-height: 300px; text-align: center">
+                                        <p:graphicImage library="images" name="expired.jpg" alt="SESION EXPIRADA" />
+                                        <p style="font-size: 20px;" > #{bundle.error_sesion_expirada} </p>
+                                        <br/><br/>
+                                        <p:commandButton value="Autentificarse" action="#{seguridadController.logout}"  />
+                                    </div>
+                                </h:form>
+                        </p:layoutUnit>
+
+                    </c:otherwise>
+                
+                </c:choose>
+       </p:layout>
+                    
+            
+   </h:body>
+</html>
