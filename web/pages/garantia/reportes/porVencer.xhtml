@@ -40,76 +40,82 @@
                       
                 <p:commandButton value="BUSCAR" icon="ui-icon-search" actionListener="#{garantiaController.resetReporteXvencer}" update="dtGarantiasXvencer" /> 
                     
-                    <br/>
-                    <p:scrollPanel style="width:100%;height:450px;" mode="native">
-                <h:commandLink style="float: left"> 
+                <h:commandLink style="float: right"> 
                        <p:graphicImage library="iconos" name="excel.png" title="Exportar a Excel" />  
                        <p:dataExporter type="xls" target="dtGarantiasXvencer" fileName="GARANTIAS_POR_VENCER" postProcessor="#{funciones.postProcessXLS_XVENCER}"/>  
                 </h:commandLink> 
-                    <p:commandButton action="#{garantiaController.generarRptXvencer}" update=":frmRptXvencer" type="submit" icon="ico-pdf" iconPos="center" style="width: 30px;height: auto;float: left" />
+                <p:commandButton action="#{garantiaController.generarRptXvencer}" update=":frmRptXvencer" type="submit" icon="ico-pdf" iconPos="center" style="width: 30px;height: auto;float: right" />
              
-                    <p:dataTable id="dtGarantiasXvencer" var="garantia" value="#{garantiaController.porVencer}" filteredValue="#{garantiaController.filtroXvencer}"
-                                 paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 styleClass="datatable" emptyMessage="NO EXISTEN GARANTIAS POR VENCER" style="float: left;" >
-
-                        <p:column headerText="CLAVE"  >
-                            <f:facet name="header">CLAVE</f:facet>
-                            <h:outputText value="#{garantia.anio}/#{garantia.correlativo}" />
-                        </p:column>
+                
+                <p:remoteCommand name="refreshFooter" actionListener="#{garantiaController.filterTblGarantiasXvencer}" update=":frmGarantiasXvencer:dtGarantiasXvencer:totalXvencer"/>  
+                 
+                <p:dataTable id="dtGarantiasXvencer" var="garantia" value="#{garantiaController.porVencer}" filteredValue="#{garantiaController.filtroXvencer}"
+                             paginator="true" rows="100" paginatorPosition="top"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             scrollable="true" scrollWidth="100%" scrollHeight="350" styleClass="datatable" emptyMessage="NO EXISTEN GARANTIAS POR VENCER" style="float: left;" >
+                    
+                    <p:ajax event="filter" partialSubmit="true" oncomplete="refreshFooter();" process="@this"/> 
                         
-                        <p:column headerText="RECIBIDO" >
-                            <f:facet name="header">RECIBIDO</f:facet>
-                            <h:outputText value="#{garantia.fechaInicioLabel}" />
-                        </p:column>
-                        <p:column headerText="PROCESO" filterBy="#{garantia.proceso.numero}" filterStyle="width:80%" >
-                            <f:facet name="header">PROCESO</f:facet>
-                            <h:outputText value="#{garantia.proceso.numero}" />
-                        </p:column>
-                    <p:column headerText="DESCRIPCION" style="width: 20%" >
-                            <f:facet name="header">DESCRIPCION</f:facet>
-                            <h:outputText value="#{garantia.proceso.descripcion}" />
-                        </p:column>
-                        <p:column headerText="CONTRATO" filterBy="#{garantia.contrato}" filterStyle="width:80%" >
-                            <f:facet name="header">CONTRATO</f:facet>
-                            <h:outputText value="#{garantia.contrato.numero}"/>
-                        </p:column>
-                        <p:column headerText="TECNICO" filterBy="#{garantia.proceso.tecnico.nombre}" filterMatchMode="contains" filterStyle="width:80%"  >
-                            <f:facet name="header">TECNICO</f:facet>
-                            <h:outputText value="#{garantia.proceso.tecnico.nombre}" />
-                        </p:column>
-                        <p:column headerText="PROVEEDOR" filterBy="#{garantia.proveedor}" filterMatchMode="contains" filterStyle="width:80%">
-                            <f:facet name="header">PROVEEDOR</f:facet>
-                            <h:outputText value="#{garantia.proveedor.nombre}" />
-                        </p:column>
-                        <p:column headerText="AFIANZADORA" filterBy="#{garantia.afianzadora.nombre}" filterStyle="width:80%"  >
-                            <f:facet name="header">AFIANZADORA</f:facet>
-                            <h:outputText value="#{garantia.afianzadora.nombre}"/>
-                        </p:column>
-                        <p:column headerText="TIPO" filterBy="#{garantia.tipo.nombreTipo}" filterOptions="#{tipoGarantiaController.itemsAvailableSelectOne}" filterMatchMode="exact" style="width: 7%"  >
-                            <f:facet name="header">TIPO</f:facet>
-                            <h:outputText value="#{garantia.tipo.nombreTipo}" />
-                        </p:column>
-                        <p:column headerText="N&deg; GARANTIA" >
-                            <f:facet name="header">GARANTIA</f:facet>
-                            <h:outputText value="#{garantia.numGarantia}" />
-                        </p:column>
-                        <p:column headerText="PLAZO" >
-                            <f:facet name="header">PLAZO</f:facet>
-                            <h:outputText value="#{garantia.plazo}" />
-                        </p:column>
-                        <p:column headerText="FECHA VENCTO" >
-                            <f:facet name="header">FECHA VENCTO</f:facet>
-                            <h:outputText value="#{garantia.fechaVencimientoLabel}" />
-                        </p:column>
-                        <p:column headerText="MONTO" >
-                            <f:facet name="header">MONTO</f:facet>
-                            <h:outputText value="#{garantia.monto}" />
-                        </p:column>
-                        <p:column headerText="ESTADO" filterBy="#{garantia.vencida}" filterOptions="#{tipoGarantiaController.estadosXVencer}" filterMatchMode="exact" filterStyle="width:80%" style="width:7%" >
-                            <h:outputText value="#{garantia.vencida?'VENCIDA':'POR VENCER'}" style="#{garantia.vencida?'color:red':'color:orange'}" />
-                        </p:column>
-                    </p:dataTable>
-                    </p:scrollPanel>
+                    <p:column headerText="CLAVE" width="40" >
+                        <f:facet name="header">CLAVE</f:facet>
+                        <h:outputText value="#{garantia.anio}/#{garantia.correlativo}" />
+                    </p:column>
+
+                    <p:column headerText="RECIBIDO" width="60" >
+                        <f:facet name="header">RECIBIDO</f:facet>
+                        <h:outputText value="#{garantia.fechaInicioLabel}" />
+                    </p:column>
+                    <p:column headerText="PROCESO" filterBy="#{garantia.proceso.numero}" filterStyle="width:80%" width="80">
+                        <f:facet name="header">PROCESO</f:facet>
+                        <h:outputText value="#{garantia.proceso.numero}" />
+                    </p:column>
+                    <p:column headerText="DESCRIPCION" width="300" >
+                        <f:facet name="header">DESCRIPCION</f:facet>
+                        <h:outputText value="#{garantia.proceso.descripcion}" />
+                    </p:column>
+                    <p:column headerText="CONTRATO" filterBy="#{garantia.contrato}" filterStyle="width:80%" width="80">
+                        <f:facet name="header">CONTRATO</f:facet>
+                        <h:outputText value="#{garantia.contrato.numero}"/>
+                    </p:column>
+                    <p:column headerText="TECNICO" filterBy="#{garantia.proceso.tecnico.nombre}" filterMatchMode="contains" filterStyle="width:80%" width="150" >
+                        <f:facet name="header">TECNICO</f:facet>
+                        <h:outputText value="#{garantia.proceso.tecnico.nombre}" />
+                    </p:column>
+                    <p:column headerText="PROVEEDOR" filterBy="#{garantia.proveedor}" filterMatchMode="contains" filterStyle="width:80%" width="150">
+                        <f:facet name="header">PROVEEDOR</f:facet>
+                        <h:outputText value="#{garantia.proveedor.nombre}" />
+                    </p:column>
+                    <p:column headerText="AFIANZADORA" filterBy="#{garantia.afianzadora.nombre}" filterStyle="width:80%" width="150" >
+                        <f:facet name="header">AFIANZADORA</f:facet>
+                        <h:outputText value="#{garantia.afianzadora.nombre}"/>
+                    </p:column>
+                    <p:column headerText="TIPO" filterBy="#{garantia.tipo.nombreTipo}" filterOptions="#{tipoGarantiaController.itemsAvailableSelectOne}" filterMatchMode="exact" width="100"  >
+                        <f:facet name="header">TIPO</f:facet>
+                        <h:outputText value="#{garantia.tipo.nombreTipo}" />
+                    </p:column>
+                    <p:column headerText="N&deg; GARANTIA" width="60" >
+                        <f:facet name="header">GARANTIA</f:facet>
+                        <h:outputText value="#{garantia.numGarantia}" />
+                    </p:column>
+                    <p:column headerText="PLAZO" width="40">
+                        <f:facet name="header">PLAZO</f:facet>
+                        <h:outputText value="#{garantia.plazo}" />
+                    </p:column>
+                    <p:column headerText="FECHA VENCTO" width="80" >
+                        <f:facet name="header">FECHA VENCTO</f:facet>
+                        <h:outputText value="#{garantia.fechaVencimientoLabel}" />
+                    </p:column>
+                    <p:column headerText="MONTO" width="100">
+                        <f:facet name="header">MONTO</f:facet>
+                        <h:outputText value="#{garantia.monto}" />
+                    </p:column>
+                    <p:column headerText="ESTADO" filterBy="#{garantia.vencida}" filterOptions="#{tipoGarantiaController.estadosXVencer}" filterMatchMode="exact" filterStyle="width:80%" width="100" >
+                        <h:outputText value="#{garantia.vencida?'VENCIDA':'POR VENCER'}" style="#{garantia.vencida?'color:red':'color:orange'}" />
+                    </p:column>
+                    
+                    <f:facet name="footer" >
+                        <h:outputText id="totalXvencer"  value="TOTAL: #{garantiaController.totalXvencer} GARANTIAS" />
+                    </f:facet>
+                </p:dataTable>
             </h:form>
         
         

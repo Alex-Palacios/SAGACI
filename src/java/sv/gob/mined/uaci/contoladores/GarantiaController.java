@@ -31,6 +31,7 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -52,6 +53,7 @@ public class GarantiaController implements Serializable {
     private Garantia selected;
     private List<Garantia> selectedGarantias;
     private Garantia newItem;
+    private Integer totalG;
     
 
     public GarantiaController() {
@@ -79,6 +81,7 @@ public class GarantiaController implements Serializable {
     public List<Garantia> getItems() {
         if (items == null) {
             items = getJpaController().findGarantiaByAnio(anioRegistro);
+            this.totalG = items.size();
         }
         return items;
     }
@@ -114,6 +117,14 @@ public class GarantiaController implements Serializable {
         this.newItem = newItem;
     }
 
+    public Integer getTotalG() {
+        return totalG;
+    }
+
+    public void setTotalG(Integer totalG) {
+        this.totalG = totalG;
+    }
+
     
 
     public List<Garantia> getFiltroGarantias() {
@@ -123,7 +134,17 @@ public class GarantiaController implements Serializable {
     public void setFiltroGarantias(List<Garantia> filtroGarantias) {
         this.filtroGarantias = filtroGarantias;
     }
+    
+    public void filterTblGarantias() {
+        if(this.filtroGarantias != null){
+            this.totalG = this.filtroGarantias.size();
+        }else{
+            this.totalG = items.size();
+        }
+    }
 
+    
+    
     public void nextNumGarantia() {
         if(newItem != null){
             newItem.setCorrelativo(jpaController.getNextNumGrantia(newItem.getAnio()));
@@ -299,11 +320,22 @@ public class GarantiaController implements Serializable {
     
     private List<Garantia> vencidas;
     private List<Garantia> filtroVencidas;
+    private Integer totalVencidas;
+
+    public Integer getTotalVencidas() {
+        return totalVencidas;
+    }
+
+    public void setTotalVencidas(Integer totalVencidas) {
+        this.totalVencidas = totalVencidas;
+    }
+    
     
     
     public List<Garantia> getVencidas() {
         if (vencidas == null) {
             vencidas = getJpaController().reporteGarantiasVencidas();
+            totalVencidas = vencidas.size();
         }
         return vencidas;
     }
@@ -320,6 +352,13 @@ public class GarantiaController implements Serializable {
         this.filtroVencidas = filtroVencidas;
     }
     
+    public void filterTblGarantiasVencidas() {
+        if(this.filtroVencidas != null){
+            this.totalVencidas = this.filtroVencidas.size();
+        }else{
+            this.totalVencidas = vencidas.size();
+        }
+    }
     
     public void resetReporteVencidas(){
         vencidas = null;
@@ -366,10 +405,22 @@ public class GarantiaController implements Serializable {
     private List<Garantia> porVencer;
     private List<Garantia> filtroXvencer;
     private Date fechaVencer;
+    private Integer totalXvencer;
+
+    public Integer getTotalXvencer() {
+        return totalXvencer;
+    }
+
+    public void setTotalXvencer(Integer totalXvencer) {
+        this.totalXvencer = totalXvencer;
+    }
+    
+    
 
     public List<Garantia> getPorVencer() {
         if (porVencer == null) {
             porVencer = getJpaController().reporteGarantiasXVencer(fechaVencer);
+            totalXvencer = porVencer.size();
         }
         return porVencer;
     }
@@ -388,6 +439,14 @@ public class GarantiaController implements Serializable {
         this.filtroXvencer = filtroXvencer;
     }
 
+    public void filterTblGarantiasXvencer() {
+        if(this.filtroXvencer != null){
+            this.totalXvencer = this.filtroXvencer.size();
+        }else{
+            this.totalXvencer = porVencer.size();
+        }
+    }
+    
     public Date getFechaVencer() {
         return fechaVencer;
     }
@@ -658,14 +717,26 @@ public class GarantiaController implements Serializable {
         }
     }
     
-    /* REPORTE DE GARANTIAS VENCIDAS */
+    /* REPORTE DE GARANTIAS VIGENTES */
     
     private List<Garantia> vigentes;
     private List<Garantia> filtroVigentes;
+    private Integer totalVigentes;
+
+    public Integer getTotalVigentes() {
+        return totalVigentes;
+    }
+
+    public void setTotalVigentes(Integer totalVigentes) {
+        this.totalVigentes = totalVigentes;
+    }
+    
+    
 
     public List<Garantia> getVigentes() {
         if (vigentes == null) {
             vigentes = getJpaController().reporteGarantiasVigentes();
+            totalVigentes = vigentes.size();
         }
         return vigentes;
     }
@@ -682,6 +753,13 @@ public class GarantiaController implements Serializable {
         this.filtroVigentes = filtroVigentes;
     }
     
+    public void filterTblGarantiasVigentes() {
+        if(this.filtroVigentes != null){
+            this.totalVigentes = this.filtroVigentes.size();
+        }else{
+            this.totalVigentes = vigentes.size();
+        }
+    }
     
     public void resetReporteVigentes(){
         vigentes = null;
